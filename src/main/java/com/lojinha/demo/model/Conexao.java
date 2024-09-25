@@ -1,5 +1,4 @@
 package com.lojinha.demo.model;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -14,6 +13,7 @@ public class Conexao {
         Connection conexao = null;
         try {
              conexao = DriverManager.getConnection(stringDeConexao, usuario, senha);
+             System.out.println("deu certo");
         } catch (Exception e) {
             System.out.println("Erro ao conectar com o banco de dados");
             e.printStackTrace();
@@ -21,4 +21,3 @@ public class Conexao {
         return conexao;
     }
 }
-

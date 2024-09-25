@@ -30,7 +30,7 @@ public class Usuario {
 
     public void insert() {
         Conexao c = new Conexao();
-        Connection dbConn = c.getConexao();
+        Connection dbConn = (Connection) c.getConexao();
 
         String sql = "INSERT INTO usuario "+
         "(nome, email, senha) "+

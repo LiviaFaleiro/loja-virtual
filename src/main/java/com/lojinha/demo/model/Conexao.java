@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 
 
 public class Conexao {
-    private String banco = "loja_de_tatareco";
+    private String banco = "lojinha";
     private String usuario = "root";
-    private String senha = "root";
+    private String senha = "";
 
     public Connection getConexao(){
         String stringDeConexao = "jdbc:mysql://localhost:3306/" + banco;

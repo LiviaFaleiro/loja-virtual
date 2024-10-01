@@ -10,9 +10,9 @@ import com.lojinha.demo.model.Conexao;
 public class DemoApplication {
 
 	public static void main(String[] args) throws Exception {
-        Conexao c = new Conexao();
-        Connection con = c.getConexao();
-
-	}
+       
+        SpringApplication.run(DemoApplication.class, args);
+}
+	
 
 }

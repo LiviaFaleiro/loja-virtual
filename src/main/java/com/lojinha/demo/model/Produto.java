@@ -55,6 +55,51 @@ public class Produto {
         }
     }
 
+    public void update() {
+        Conexao c = new Conexao();
+        Connection dbConn = (Connection) c.getConexao();
+
+        String sql = "UPDATE produto SET valor = ?, nome = ? WHERE id = ?";
+
+        try {
+            PreparedStatement pstmt = dbConn.prepareStatement(sql);
+
+            pstmt.setDouble(3, this.valor);
+            pstmt.setString(2, this.nome);
+            pstmt.setInt(1, this.id);
+         
+
+            pstmt.executeUpdate();
+
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void delete() {
+        Conexao c = new Conexao();
+        Connection dbConn = (Connection) c.getConexao();
+
+        String sql = "DELETE FROM produto WHERE id = ?";
+
+        try (PreparedStatement pstmt = dbConn.prepareStatement(sql)) {
+          
+            pstmt.setInt(1, this.id);
+                   
+
+            pstmt.executeUpdate();
+
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     
 }

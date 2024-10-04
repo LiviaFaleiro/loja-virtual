@@ -9,29 +9,28 @@ import com.lojinha.demo.model.Produto;
 
 @RestController
 public class ProdutoController {
+
     @PostMapping("/produto/criar")
     public Produto cadastrar(Produto produto) {
         produto.insert();
         return produto;
-
     }
 
-    @PostMapping("/produto/mudar")
-    public Produto mudar(Produto produto) {
+    @PostMapping("/produto/atualizar")
+    public Produto atualizar(Produto produto) {
+        // O método update agora atualizará apenas os campos fornecidos
         produto.update();
         return produto;
     }
 
     @PostMapping("/produto/excluir")
     public Produto excluir(Produto produto) {
-
         produto.delete();
         return produto;
     }
-    
+
     @GetMapping("/produto/pegar")
     public List<Produto> getAllProduto() {
         return Produto.getAll();
     }
-
 }

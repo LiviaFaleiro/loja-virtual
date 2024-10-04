@@ -9,10 +9,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class Produto {
-
     private int id;
     private double valor;
     private String nome;
+
 
     public int getId() {
         return id;
@@ -52,54 +52,91 @@ public class Produto {
             if (generatedKeys.next()) {
                 this.id = generatedKeys.getInt(1);
             }
-        } catch (SQLException e)
-
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void update() {
         Conexao c = new Conexao();
-        Connection dbConn = (Connection) c.getConexao();
+        Connection dbConn = c.getConexao();
 
-        String sql = "UPDATE produto SET valor = ?, nome = ? WHERE id = ?";
+        if (dbConn == null) {
+            throw new RuntimeException("Falha ao conectar ao banco de dados.");
+        }
 
-        try {
-            PreparedStatement pstmt = dbConn.prepareStatement(sql);
+        Produto produtoExistente = findById(this.id);
+        if (produtoExistente == null) {
+            throw new RuntimeException("Produto com ID " + this.id + " não encontrado.");
+        }
 
-            pstmt.setDouble(1, this.valor);
-            pstmt.setString(2, this.nome);
+
+        if (this.nome == null || this.nome.isEmpty()) {
+            this.nome = produtoExistente.getNome();
+        }
+        if (this.valor == 0) { 
+            this.valor = produtoExistente.getValor();
+        }
+
+        String sql = "UPDATE produto SET nome = ?, valor = ? WHERE id = ?";
+
+        try (PreparedStatement pstmt = dbConn.prepareStatement(sql)) {
+            pstmt.setString(1, this.nome);
+            pstmt.setDouble(2, this.valor);
             pstmt.setInt(3, this.id);
 
             pstmt.executeUpdate();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public void delete() {
         Conexao c = new Conexao();
-        Connection dbConn = (Connection) c.getConexao();
+        Connection dbConn = c.getConexao();
 
         String sql = "DELETE FROM produto WHERE id = ?";
 
         try (PreparedStatement pstmt = dbConn.prepareStatement(sql)) {
-
             pstmt.setInt(1, this.id);
-
             pstmt.executeUpdate();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public static Produto findById(int id) {
+        Produto produto = null;
+        Conexao c = new Conexao();
+        Connection dbConn = c.getConexao();
+
+        if (dbConn == null) {
+            throw new RuntimeException("Falha ao conectar ao banco de dados.");
+        }
+
+        String sql = "SELECT id, nome, valor FROM produto WHERE id = ?";
+
+        try (PreparedStatement pstmt = dbConn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                produto = new Produto();
+                produto.setId(rs.getInt("id"));
+                produto.setNome(rs.getString("nome"));
+                produto.setValor(rs.getDouble("valor"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return produto;
+    }
+
     public static List<Produto> getAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAll'");
+       List<Produto> produtos = new ArrayList<>();
+       Conexao c = new Conexao();
+       Connection dbConn = c.getConexao();
+        return null;
     }
 }
-

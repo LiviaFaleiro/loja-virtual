@@ -1,10 +1,10 @@
 package com.lojinha.demo.model;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Categoria {
@@ -42,39 +42,45 @@ public class Categoria {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-
         }
     }
 
     public void update() {
         Conexao c = new Conexao();
         Connection dbConn = c.getConexao();
-
-        // Certifique-se de que dbConn não é nulo
+    
         if (dbConn == null) {
             throw new RuntimeException("Falha ao conectar ao banco de dados");
         }
-
+    
+        // Busca a categoria existente para obter os valores atuais
+        Categoria categoriaExistente = findById(this.id);
+        if (categoriaExistente == null) {
+            throw new RuntimeException("Categoria com ID " + this.id + " não encontrada.");
+        }
+    
+        // Atualiza os campos que não são nulos ou vazios
+        if (this.descricao == null || this.descricao.isEmpty()) {
+            this.descricao = categoriaExistente.getDescricao(); // Mantém o valor atual
+        }
+    
         String sql = "UPDATE categoria SET descricao = ? WHERE id = ?";
-
-        try {
-            PreparedStatement pstmt = dbConn.prepareStatement(sql);
-
-            pstmt.setString(1, this.descricao); // Nome atualizado
-            pstmt.setInt(2, this.id); // ID do usuário a ser atualizado
-
+    
+        try (PreparedStatement pstmt = dbConn.prepareStatement(sql)) {
+            pstmt.setString(1, this.descricao);
+            pstmt.setInt(2, this.id);
+    
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected == 0) {
-                System.out.println("Nenhum usuário encontrado com o ID: " + this.id);
+                System.out.println("Nenhuma categoria encontrada com o ID: " + this.id);
             } else {
-                System.out.println("Usuário atualizado com sucesso.");
+                System.out.println("Categoria atualizada com sucesso.");
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
+    
 
     public void delete() {
         Conexao c = new Conexao();
@@ -83,19 +89,58 @@ public class Categoria {
         String sql = "DELETE FROM categoria WHERE id = ?";
 
         try (PreparedStatement pstmt = dbConn.prepareStatement(sql)) {
-
             pstmt.setInt(1, this.id);
-
             pstmt.executeUpdate();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public static List<Categoria> getAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAll'");
+        List<Categoria> categorias = new ArrayList<>();
+        Conexao c = new Conexao();
+        Connection dbConn = c.getConexao();
+        
+        String sql = "SELECT id, descricao FROM categoria";
+        
+        try (PreparedStatement pstmt = dbConn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                Categoria categoria = new Categoria();
+                categoria.setId(rs.getInt("id"));
+                categoria.setDescricao(rs.getString("descricao"));
+                categorias.add(categoria);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categorias;
+    }
+
+    public static Categoria findById(int id) {
+        Categoria categoria = null;
+        Conexao c = new Conexao();
+        Connection dbConn = c.getConexao();
+
+        if (dbConn == null) {
+            throw new RuntimeException("Falha ao conectar ao banco de dados.");
+        }
+
+        String sql = "SELECT id, descricao FROM categoria WHERE id = ?";
+
+        try (PreparedStatement pstmt = dbConn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                categoria = new Categoria();
+                categoria.setId(rs.getInt("id"));
+                categoria.setDescricao(rs.getString("descricao"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categoria;
     }
 }
-

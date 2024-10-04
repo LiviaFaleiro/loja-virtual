@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.lojinha.demo.model.Categoria;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 public class CategoriaController {
@@ -15,11 +14,11 @@ public class CategoriaController {
     public Categoria cadastrar(Categoria categoria) {
         categoria.insert();
         return categoria;
-
     }
 
-    @PostMapping("/categoria/mudar")
-    public Categoria mudar(Categoria categoria) {
+    @PostMapping("/categoria/atualizar")
+    public Categoria atualizar(Categoria categoria) {
+        // O método update agora atualizará apenas os campos fornecidos
         categoria.update();
         return categoria;
     }
@@ -27,7 +26,6 @@ public class CategoriaController {
     @PostMapping("/categoria/excluir")
     public Categoria excluir(Categoria categoria) {
         categoria.delete();
-
         return categoria;
     }
 
@@ -35,5 +33,4 @@ public class CategoriaController {
     public List<Categoria> getAllCategoria() {
         return Categoria.getAll();
     }
-
 }

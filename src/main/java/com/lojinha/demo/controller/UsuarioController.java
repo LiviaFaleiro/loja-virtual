@@ -1,9 +1,7 @@
 package com.lojinha.demo.controller;
 
 import org.springframework.web.bind.annotation.RestController;
-
 import com.lojinha.demo.model.Usuario;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,8 +20,8 @@ public class UsuarioController {
 
     }
 
-    @PostMapping("/usuario/mudar")
-    public Usuario mudar(Usuario usuario) {
+    @PostMapping("/usuario/atualizar")
+    public Usuario atualizar(Usuario usuario) {
         usuario.update();
         return usuario;
     }

@@ -68,34 +68,52 @@ public class Usuario {
     public void update() {
         Conexao c = new Conexao();
         Connection dbConn = c.getConexao();
-
+    
         // Certifique-se de que dbConn não é nulo
         if (dbConn == null) {
             throw new RuntimeException("Falha ao conectar ao banco de dados");
         }
-
+    
+        // Primeiro, busca o usuário existente para obter os valores atuais
+        Usuario usuarioExistente = Usuario.findById(this.id);
+        if (usuarioExistente == null) {
+            throw new RuntimeException("Usuário com ID " + this.id + " não encontrado.");
+        }
+    
+        // Se algum campo estiver nulo, mantenha o valor antigo
+        if (this.nome == null || this.nome.isEmpty()) {
+            this.nome = usuarioExistente.getNome();
+        }
+        if (this.email == null || this.email.isEmpty()) {
+            this.email = usuarioExistente.getEmail();
+        }
+        if (this.senha == null || this.senha.isEmpty()) {
+            this.senha = usuarioExistente.getSenha();
+        }
+    
         String sql = "UPDATE usuario SET nome = ?, email = ?, senha = ? WHERE id = ?";
-
+    
         try {
             PreparedStatement pstmt = dbConn.prepareStatement(sql);
-
-            pstmt.setString(1, this.nome); // Nome atualizado
-            pstmt.setString(2, this.email); // Email atualizado
-            pstmt.setString(3, this.senha); // Senha atualizada
-            pstmt.setInt(4, this.id); // ID do usuário a ser atualizado
-
+    
+            pstmt.setString(1, this.nome);
+            pstmt.setString(2, this.email);
+            pstmt.setString(3, this.senha);
+            pstmt.setInt(4, this.id);
+    
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected == 0) {
                 System.out.println("Nenhum usuário encontrado com o ID: " + this.id);
             } else {
                 System.out.println("Usuário atualizado com sucesso.");
             }
-
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
+    
+    
 
     public void delete() {
         Conexao c = new Conexao();
@@ -138,5 +156,41 @@ public class Usuario {
 
         return usuarios;
     }
+
+   
+    public static Usuario findById(int id) {
+        Usuario usuario = null;  // Inicializa a variável usuário
+        Conexao c = new Conexao();
+        Connection dbConn = c.getConexao();
+    
+        if (dbConn == null) {
+            throw new RuntimeException("Falha ao conectar ao banco de dados.");
+        }
+    
+        String sql = "SELECT id, nome, email, senha FROM usuario WHERE id = ?";
+    
+        try {
+            PreparedStatement pstmt = dbConn.prepareStatement(sql);
+            pstmt.setInt(1, id);  // Define o parâmetro ID na query
+    
+            ResultSet rs = pstmt.executeQuery();
+    
+            // Se encontrar o usuário, mapeia os dados para o objeto Usuario
+            if (rs.next()) {
+                usuario = new Usuario();
+                usuario.setId(rs.getInt("id"));
+                usuario.setNome(rs.getString("nome"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setSenha(rs.getString("senha"));
+            }
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar usuário por ID.", e);
+        }
+    
+        return usuario;
+    }
+    
 
 }

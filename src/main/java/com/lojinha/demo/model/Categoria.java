@@ -1,6 +1,5 @@
 package com.lojinha.demo.model;
 
-import javax.swing.Spring;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,11 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class Produto {
-
+public class Categoria {
     private int id;
-    private double valor;
-    private String nome;
+    private String descricao;
 
     public int getId() {
         return id;
@@ -22,57 +19,56 @@ public class Produto {
         this.id = id;
     }
 
-    public double getValor() {
-        return valor;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setValor(double valor) {
-        this.valor = valor;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public void insert() {
         Conexao c = new Conexao();
         Connection dbConn = c.getConexao();
-        String sql = "INSERT INTO produto (nome, valor) VALUES (?, ?)";
+        String sql = "INSERT INTO categoria (descricao) VALUES (?)";
         try {
             PreparedStatement pstmt = dbConn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, this.nome);
-            pstmt.setDouble(2, this.valor);
+            pstmt.setString(1, this.descricao);
 
             pstmt.executeUpdate();
             ResultSet generatedKeys = pstmt.getGeneratedKeys();
             if (generatedKeys.next()) {
                 this.id = generatedKeys.getInt(1);
             }
-        } catch (SQLException e)
-
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
+
         }
     }
 
     public void update() {
         Conexao c = new Conexao();
-        Connection dbConn = (Connection) c.getConexao();
+        Connection dbConn = c.getConexao();
 
-        String sql = "UPDATE produto SET valor = ?, nome = ? WHERE id = ?";
+        // Certifique-se de que dbConn não é nulo
+        if (dbConn == null) {
+            throw new RuntimeException("Falha ao conectar ao banco de dados");
+        }
+
+        String sql = "UPDATE categoria SET descricao = ? WHERE id = ?";
 
         try {
             PreparedStatement pstmt = dbConn.prepareStatement(sql);
 
-            pstmt.setDouble(1, this.valor);
-            pstmt.setString(2, this.nome);
-            pstmt.setInt(3, this.id);
+            pstmt.setString(1, this.descricao); // Nome atualizado
+            pstmt.setInt(2, this.id); // ID do usuário a ser atualizado
 
-            pstmt.executeUpdate();
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected == 0) {
+                System.out.println("Nenhum usuário encontrado com o ID: " + this.id);
+            } else {
+                System.out.println("Usuário atualizado com sucesso.");
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,9 +78,9 @@ public class Produto {
 
     public void delete() {
         Conexao c = new Conexao();
-        Connection dbConn = (Connection) c.getConexao();
+        Connection dbConn = c.getConexao();
 
-        String sql = "DELETE FROM produto WHERE id = ?";
+        String sql = "DELETE FROM categoria WHERE id = ?";
 
         try (PreparedStatement pstmt = dbConn.prepareStatement(sql)) {
 
@@ -97,7 +93,7 @@ public class Produto {
         }
     }
 
-    public static List<Produto> getAll() {
+    public static List<Categoria> getAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getAll'");
     }

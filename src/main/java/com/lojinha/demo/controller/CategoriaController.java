@@ -18,7 +18,6 @@ public class CategoriaController {
 
     @PostMapping("/categoria/atualizar")
     public Categoria atualizar(Categoria categoria) {
-        // O método update agora atualizará apenas os campos fornecidos
         categoria.update();
         return categoria;
     }

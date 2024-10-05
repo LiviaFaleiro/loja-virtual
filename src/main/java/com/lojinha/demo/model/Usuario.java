@@ -69,18 +69,18 @@ public class Usuario {
         Conexao c = new Conexao();
         Connection dbConn = c.getConexao();
     
-        // Certifique-se de que dbConn não é nulo
+     
         if (dbConn == null) {
             throw new RuntimeException("Falha ao conectar ao banco de dados");
         }
     
-        // Primeiro, busca o usuário existente para obter os valores atuais
+   
         Usuario usuarioExistente = Usuario.findById(this.id);
         if (usuarioExistente == null) {
             throw new RuntimeException("Usuário com ID " + this.id + " não encontrado.");
         }
     
-        // Se algum campo estiver nulo, mantenha o valor antigo
+     
         if (this.nome == null || this.nome.isEmpty()) {
             this.nome = usuarioExistente.getNome();
         }
@@ -159,7 +159,7 @@ public class Usuario {
 
    
     public static Usuario findById(int id) {
-        Usuario usuario = null;  // Inicializa a variável usuário
+        Usuario usuario = null; 
         Conexao c = new Conexao();
         Connection dbConn = c.getConexao();
     
@@ -171,11 +171,11 @@ public class Usuario {
     
         try {
             PreparedStatement pstmt = dbConn.prepareStatement(sql);
-            pstmt.setInt(1, id);  // Define o parâmetro ID na query
+            pstmt.setInt(1, id); 
     
             ResultSet rs = pstmt.executeQuery();
     
-            // Se encontrar o usuário, mapeia os dados para o objeto Usuario
+      
             if (rs.next()) {
                 usuario = new Usuario();
                 usuario.setId(rs.getInt("id"));

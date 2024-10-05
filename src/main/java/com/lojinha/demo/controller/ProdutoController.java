@@ -18,7 +18,6 @@ public class ProdutoController {
 
     @PostMapping("/produto/atualizar")
     public Produto atualizar(Produto produto) {
-        // O método update agora atualizará apenas os campos fornecidos
         produto.update();
         return produto;
     }

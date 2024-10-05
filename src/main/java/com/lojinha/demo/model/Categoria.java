@@ -53,13 +53,13 @@ public class Categoria {
             throw new RuntimeException("Falha ao conectar ao banco de dados");
         }
     
-        // Busca a categoria existente para obter os valores atuais
+ 
         Categoria categoriaExistente = findById(this.id);
         if (categoriaExistente == null) {
             throw new RuntimeException("Categoria com ID " + this.id + " não encontrada.");
         }
     
-        // Atualiza os campos que não são nulos ou vazios
+
         if (this.descricao == null || this.descricao.isEmpty()) {
             this.descricao = categoriaExistente.getDescricao(); // Mantém o valor atual
         }

@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Produto {
@@ -133,10 +134,33 @@ public class Produto {
         return produto;
     }
 
-    public static List<Produto> getAll() {
-       List<Produto> produtos = new ArrayList<>();
-       Conexao c = new Conexao();
-       Connection dbConn = c.getConexao();
-        return null;
+      public static List<Produto> getAll() {
+        List<Produto> produtos = new ArrayList<>();
+        Conexao c = new Conexao();
+        Connection dbConn = c.getConexao();
+
+
+        String sql = "SELECT id, nome, valor FROM produto";
+        try {
+            PreparedStatement pstmt = dbConn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+
+            while (rs.next()) {
+                Produto produto = new Produto();
+                produto.setId(rs.getInt("id"));
+                produto.setNome(rs.getString("nome"));
+                produto.setValor(rs.getDouble("valor"));
+                produtos.add(produto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return produtos;
     }
+    
+
+
 }

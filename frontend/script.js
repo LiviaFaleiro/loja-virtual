@@ -3,6 +3,13 @@ const formProduto = document.getElementById('form-produto');
 const listaProdutos = document.getElementById('lista-produtos');
 const listaCarrinho = document.getElementById('lista-carrinho');
 const totalCarrinhoSpan = document.getElementById('total-carrinho');
+const verProdutos = document.getElementById('ver-produto');
+
+// Dados de login (admin e usuários comuns)
+const usuarios = [
+    { usuario: 'admin', senha: '1234', tipo: 'admin' },
+    { usuario: 'user', senha: '5678', tipo: 'normal' }
+];
 
 // Dados
 let produtos = [];
@@ -82,11 +89,7 @@ formProduto.addEventListener('submit', adicionarProduto);
 renderizarProdutos();
 renderizarCarrinho();
 
-// Dados de login (admin e usuários comuns)
-const usuarios = [
-    { usuario: 'admin', senha: '1234', tipo: 'admin' },
-    { usuario: 'user', senha: '5678', tipo: 'normal' }
-];
+
 
 // Elementos
 const formLogin = document.getElementById('form-login');
@@ -94,6 +97,8 @@ const telaLogin = document.getElementById('tela-login');
 const conteudoPrincipal = document.getElementById('conteudo-principal');
 const mensagemErro = document.getElementById('mensagem-erro');
 const botaoCadastrar = document.querySelector('button[onclick="mostrarTela(\'cadastro\')"]');
+const botaoMinhasCompras = document.querySelector('button[onclick="mostrarTela(\'compras\')"]');
+const botaoMeuCarrinho = document.querySelector('button[onclick="mostrarTela(\'carrinho\')"]');
 
 // Controle do tipo de usuário
 let tipoUsuarioLogado = null;
@@ -116,15 +121,19 @@ function verificarLogin(event) {
 
         // Verificar permissões
         if (tipoUsuarioLogado === 'normal') {
-            botaoCadastrar.style.display = 'none'; // Ocultar botão de cadastro
+            botaoCadastrar.style.display = 'none'; // Mostrar botão de cadastro
+            botaoMinhasCompras.style.display = 'inline-block'; // Mostrar "Minhas Compras"
+            botaoMeuCarrinho.style.display = 'inline-block'; // Mostrar "Meu Carrinho"
         } else {
             botaoCadastrar.style.display = 'inline-block'; // Mostrar botão de cadastro
-
+            botaoMinhasCompras.style.display = 'none'; // Ocultar "Minhas Compras"
+            botaoMeuCarrinho.style.display = 'none'; // Ocultar "Meu Carrinho"
         }
 
         mostrarTela('produtos'); // Exibir a tela de produtos por padrão
     } else {
         mensagemErro.style.display = 'block';
+        verProdutos.style.display = 'none';
     }
 }
 formLogin.addEventListener('submit', verificarLogin);

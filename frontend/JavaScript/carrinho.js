@@ -19,6 +19,7 @@ function renderizarCarrinho() {
         const itemDiv = document.createElement('div');
         itemDiv.classList.add('item-carrinho');
         itemDiv.innerHTML = `
+        <img src="${item.imagem}" alt="${item.nome}">
             <p>${item.nome} - R$ ${item.preco.toFixed(2)}</p>
             <button onclick="removerDoCarrinho(${index})">Remover</button>
         `;

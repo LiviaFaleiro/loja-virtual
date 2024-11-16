@@ -108,6 +108,9 @@ function verificarLogin(event) {
     }
 }
 
+formLogin.addEventListener('submit', verificarLogin);
+
+
 
 
 function adicionarProduto(event) {

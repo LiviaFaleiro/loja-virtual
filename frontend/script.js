@@ -25,10 +25,13 @@ function mostrarTela(tela) {
 
 // Renderizar produtos
 function renderizarProdutos() {
+    
     listaProdutos.innerHTML = '';
     produtos.forEach((produto, index) => {
         const produtoDiv = document.createElement('div');
         produtoDiv.classList.add('produto');
+
+      
         produtoDiv.innerHTML = `
             <img src="${produto.imagem}" alt="${produto.nome}">
             <h3>${produto.nome}</h3>
@@ -37,7 +40,9 @@ function renderizarProdutos() {
         `;
         listaProdutos.appendChild(produtoDiv);
     });
+
 }
+
 
 // Renderizar carrinho
 function renderizarCarrinho() {

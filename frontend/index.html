@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-commerce com Login</title>
+    <title>E-commerce</title>
     <link rel="stylesheet" href="/frontend/css/login.css">
     <link rel="stylesheet" href="/frontend/css/principal.css">
 </head>
 <body>
+    <!--Emilly o código inteiro está comentado pra ti entender esse grande ninho de rato ;) -->
+
     <!-- Tela de Login -->
     <section id="tela-login" class="tela">
         <h2>Login</h2>
@@ -23,7 +25,7 @@
         <p id="mensagem-erro" style="color: red; display: none;">Usuário ou senha inválidos.</p>
     </section>
 
-    <!-- Conteúdo Principal -->
+    <!-- Principal -->
     <div id="conteudo-principal" style="display: none;">
         <header class="header">
             <div class="container">
@@ -32,7 +34,8 @@
                     <button id="cadastro-produto" onclick="mostrarTela('cadastro')">Cadastrar Produto</button>
                     <button id="ver-produto" onclick="mostrarTela('produtos')">Ver Produtos</button>
                     <button id="botao-meu-carrinho" onclick="mostrarTela('carrinho')">Carrinho</button>
-                    <button id="boato-minhas-compras" onclick="mostrarTela('compras')">Minhas Compras</button>
+                    <button id="botao-minhas-compras" onclick="mostrarTela('compras')">Minhas Compras</button>
+                    <button id="configuracao" onclick="mostrarTela('configuracao')">Configurações da loja</button>
                     <button onclick="trocarUsuario()" id="botao-trocar-usuario">Trocar Usuário</button>
                 </nav>
                 
@@ -40,7 +43,7 @@
                 <section id="tela-compras" class="tela" style="display: none;">
                     <h2>Minhas Compras</h2>
                     <div id="lista-compras">
-                        <!-- Lista de compras será renderizada aqui -->
+                        <!-- Lista de compras aparece aqui -->
                     </div>
                 </section>
                 
@@ -70,7 +73,7 @@
             <section id="tela-produtos" class="tela" style="display: none;">
                 <h2>Produtos Disponíveis</h2>
                 <div id="lista-produtos" class="grid">
-                    <!-- Produtos serão exibidos aqui -->
+                    <!-- Produtos aparecem aqui -->
                 </div>
             </section>
 
@@ -86,7 +89,9 @@
                 </div>
             </section>
         </main>
-        <!-- Tela de Finalização de Compra -->
+
+        <!-- Finalização de Compra -->
+
 <section id="tela-finalizacao" class="tela" style="display: none;">
     <h2>Finalizar Compra</h2>
     <form id="form-finalizacao">
@@ -116,12 +121,16 @@
     <p id="mensagem-confirmacao" style="color: green; display: none;">Pedido confirmado com sucesso!</p>
 </section>
 
-
-        <footer class="footer">
-            <p>&copy; 2024 Minha Loja - Todos os direitos reservados.</p>
-        </footer>
     </div>
 
-    <script src="script.js"></script>
+    <script src="/frontend/JavaScript/login.js"></script>
+    <script src="/frontend/JavaScript/principal.js"></script>
+    <script src="/frontend/JavaScript/FuncaoCompra.js"></script>
+    <script src="/frontend/JavaScript/trocarUsuario.js"></script>
+    <script src="/frontend/JavaScript/finalizarCompra.js"></script>
+    <script src="/frontend/JavaScript/avaliarProduto.js"></script>
+    <script src="/frontend/JavaScript/carrinho.js"></script>
+
+
 </body>
 </html>

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/frontend/css/style.css">
 </head>
 <body>
+    <!--Comentadinho emilly please dont kill me-->
     <header>
         <h1>Catálogo do IF</h1>
         <button id="botaoLogin" onclick="alternarModalLogin()">Login</button>
@@ -15,13 +16,14 @@
         <button id="botaoAdm" onclick="painelAdm()">Painel do Administrador</button>
         <button id="botaoCarrinho" onclick="verCarrinho()">Carrinho</button>
         <button id="TelaPrincipal" onclick="telaPrincipal()">Produtos</button>
+        <button id="botaoPerfil" onclick="painelPerfil()">Perfil</button>
     </header>
     
     <main>
         <section id="produtos" class="secao-usuario">
-            <h2>Produtos</h2>
+            <h2>Catálogo</h2>
             <div id="lista-produtos">
-                <!-- Lista de produtos será preenchida aqui -->
+                <!-- Lista de produtos -->
             </div>
         </section>
         <section id="carrinho" class="secao-usuario" style="display: none;">
@@ -42,7 +44,7 @@
             <p id="preco-total">Total: R$ 0,00</p>
         </section>
     
-        <!-- Formulário para Administrador Adicionar Produtos -->
+        <!--Administrador Adicionar Produtos -->
         <section id="painel-admin" style="display: none;">
             <h2>Painel do Administrador</h2>
             <form id="form-produto">
@@ -51,6 +53,7 @@
                 <input type="file" id="imagem-produto" accept="image/*" required>
                 <button type="button" onclick="adicionarProduto()">Adicionar Produto</button>
             </form>
+            <!--colocar aqui o dashboard de vendas aaaaaaaa-->
         </section>
     </main>
     
@@ -101,6 +104,33 @@
         </form>
     </div>
 </div>
+
+<section id="perfil-usuario" style="display: none;">
+    <div class="perfil-container">
+        <h2>Editar Perfil</h2>
+        <form id="form-perfil">
+            <div class="form-group">
+                <label for="nome-usuario">Nome</label>
+                <input type="text" id="nome-usuario" name="nome">
+            </div>
+            <div class="form-group">
+                <label for="email-usuario">Email</label>
+                <input type="email" id="email-usuario" name="email">
+            </div>
+            <div class="form-group">
+                <label for="senha-atual">Senha Atual</label>
+                <input type="password" id="senha-atual" name="senhaAtual">
+            </div>
+            <div class="form-group">
+                <label for="nova-senha">Nova Senha</label>
+                <input type="password" id="nova-senha" name="novaSenha">
+            </div>
+            <button type="button" onclick="atualizarPerfil()">Salvar Alterações</button>
+            <button type="button" onclick="voltarPerfil()">Voltar</button>
+        </form>
+    </div>
+</section>
+
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

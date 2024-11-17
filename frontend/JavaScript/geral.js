@@ -18,17 +18,18 @@ function fazerLogin() {
     const usuarioEncontrado = usuarios.find(u => u.usuario === usuario && u.senha === senha);
 
     if (usuarioEncontrado) {
-        usuarioAtual = usuarioEncontrado; // usuario atuaaaaal
+        usuarioAtual = usuarioEncontrado; //usuário atual
         alert(`Bem-vindo, ${usuarioAtual.usuario}`);
         $("#modal-login").hide();
 
-        
         if (usuarioAtual.tipo === "admin") {
             $("#botaoCarrinho").hide();
             $("#botaoAdm").show();
+            $("#botaoPerfil").hide(); 
         } else {
             $("#botaoAdm").hide();
             $("#botaoCarrinho").show();
+            $("#botaoPerfil").show(); 
         }
 
         renderizarProdutos();
@@ -36,6 +37,7 @@ function fazerLogin() {
         alert("Usuário ou senha inválidos.");
     }
 }
+
 
 
 function fazerRegistro() {
@@ -173,18 +175,25 @@ function renderizarCarrinho() {
 
 
 $(document).ready(() => {
+    $("#botaoPerfil").hide();
+    $("#botaoAdm").hide();
+    $("#botaoCarrinho").hide();
     renderizarProdutos();
 });
+
 
 function verCarrinho(){ 
     document.getElementById('carrinho').style.display = 'block'
     $("#produtos").hide();
+    $("#perfil-usuario").hide();
+    $("#painel-admin").hide();
 }
 
 function telaPrincipal(){
      document.getElementById('carrinho').style.display = 'none'
      document.getElementById('produtos').style.display = 'block'
      $("#painel-admin").hide();
+     $("#perfil-usuario").hide();
 }
 
 let produtoEmEdicao = null; // Variável para armazenar o produto que está sendo editado
@@ -259,7 +268,46 @@ function excluirProduto(produtoId) {
     }
 }
 
+function painelPerfil(){
+    $("#produtos").hide();
+    $("#perfil-usuario").show();
+}
+
 function painelAdm(){
     $("#painel-admin").show();
     $("#produtos").hide();
+    $("#carrinho").hide();
+}
+
+function editarPerfil() {
+    document.getElementById('produtos').style.display = 'none';
+    document.getElementById('perfil-usuario').style.display = 'block';
+    
+    // Pre-fill the form with current user data
+    document.getElementById('nome-usuario').value = usuarioAtual.usuario;
+    document.getElementById('email-usuario').value = usuarioAtual.email || '';
+}
+
+function atualizarPerfil() {
+    const novoNome = document.getElementById('nome-usuario').value;
+    const novoEmail = document.getElementById('email-usuario').value;
+    const senhaAtual = document.getElementById('senha-atual').value;
+    const novaSenha = document.getElementById('nova-senha').value;
+
+    if (senhaAtual === usuarioAtual.senha) {
+        usuarioAtual.usuario = novoNome;
+        usuarioAtual.email = novoEmail;
+        if (novaSenha) {
+            usuarioAtual.senha = novaSenha;
+        }
+        alert('Perfil atualizado com sucesso!');
+        voltarPerfil();
+    } else {
+        alert('Senha atual incorreta!');
+    }
+}
+
+function voltarPerfil() {
+    document.getElementById('perfil-usuario').style.display = 'none';
+    document.getElementById('produtos').style.display = 'block';
 }

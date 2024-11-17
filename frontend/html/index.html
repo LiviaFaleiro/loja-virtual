@@ -75,6 +75,33 @@
         </form>
     </div>
 
+   <!-- Modal para editar ou excluir produto -->
+<div id="modal-produto" style="display: none;">
+    <div class="modal-conteudo">
+        <h2>Editar Produto</h2>
+        <form id="form-editar-produto">
+            <div class="form-group">
+                <label for="editar-nome-produto">Nome do Produto</label>
+                <input type="text" id="editar-nome-produto" placeholder="Nome do Produto" required>
+            </div>
+            <div class="form-group">
+                <label for="editar-preco-produto">Preço</label>
+                <input type="number" id="editar-preco-produto" placeholder="Preço" required>
+            </div>
+            <div class="form-group">
+                <label for="editar-imagem-produto">Imagem do Produto</label>
+                <input type="file" id="editar-imagem-produto" accept="image/*">
+                <img id="imagem-preview" src="" alt="Preview da Imagem" style="max-width: 100px; display: none; margin-top: 10px;">
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-salvar" onclick="salvarAlteracoes()">Salvar</button>
+                <button type="button" class="btn btn-cancelar" onclick="fecharModalProduto()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="/frontend/JavaScript/geral.js"></script>
 </body>

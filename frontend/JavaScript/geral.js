@@ -5,7 +5,10 @@ const usuarios = [
 
 const produtos = []; // Lista de produtos
 let carrinho = []; // Lista de itens no carrinho
-let usuarioAtual = null; // Usuário logado
+var usuarioAtual = usuarioEncontrado; // Usuário logado
+var usuarioEncontrado = usuarios.find(u => u.usuario === usuario && u.senha === senha);
+
+
 
 // Função para login
 function fazerLogin() {
@@ -20,10 +23,11 @@ function fazerLogin() {
         $("#modal-login").hide();
         if (usuarioAtual.tipo === "admin") {
             $("#painel-admin").show();
-            $("#carrinho").hide();
+            $("#botaoCarrinho").hide();
         }
         else{
             $("#painel-admin").hide();
+            $("#botaoCarrinho").show();
         }
     } else {
         alert("Usuário ou senha inválidos.");
@@ -92,7 +96,7 @@ function adicionarProduto() {
 
 // Renderiza os produtos
 function renderizarProdutos() {
-    $("#lista-produtos").html("");
+    $("#lista-produtos").html(""); // Limpa a lista de produtos
 
     produtos.forEach(produto => {
         let produtoHTML = `
@@ -102,15 +106,21 @@ function renderizarProdutos() {
                 <p>R$ ${produto.preco.toFixed(2)}</p>
         `;
 
-        if (!usuarioAtual || usuarioAtual.tipo !== 'admin') {
+        if (usuarioAtual.tipo === 'admin') {
+            // Botões para admin
+            produtoHTML += `
+                <button onclick="editarProduto(${produto.id})">Editar Produto</button>
+                <button onclick="excluirProduto(${produto.id})">Excluir Produto</button>
+            `;
+        } else if(usuarioAtual.tipo = 'usuario') {
+            // Botão para usuários comuns
             produtoHTML += `<button onclick="adicionarAoCarrinho(${produto.id})">Adicionar ao Carrinho</button>`;
         }
 
-        produtoHTML += `</div>`;
-        $("#lista-produtos").append(produtoHTML);
+        produtoHTML += `</div>`; // Fecha o card do produto
+        $("#lista-produtos").append(produtoHTML); // Adiciona o card à lista de produtos
     });
 }
-
 
 // Adiciona um produto ao carrinho
 function adicionarAoCarrinho(produtoId) {
@@ -128,9 +138,15 @@ function adicionarAoCarrinho(produtoId) {
 
 // Remove um produto do carrinho
 function removerDoCarrinho(produtoId) {
-    carrinho = carrinho.filter(item => item.id !== produtoId);
+    const item = carrinho.find(item => item.id === produtoId);
+    if (item.quantidade > 1) {
+        item.quantidade--;
+    } else {
+        carrinho = carrinho.filter(item => item.id !== produtoId);
+    }
     renderizarCarrinho();
 }
+
 
 // Renderiza o carrinho
 function renderizarCarrinho() {
@@ -157,10 +173,6 @@ $(document).ready(() => {
     renderizarProdutos();
 });
 
-if(usuarioAtual.tipo==='admin'){
-    document.getElementById('botaoCarrinho').style.display = 'none'
-}
-
 function verCarrinho(){
     document.getElementById('carrinho').style.display = 'block'
 }
@@ -168,4 +180,77 @@ function verCarrinho(){
 function telaPrincipal(){
      document.getElementById('carrinho').style.display = 'none'
      document.getElementById('produtos').style.display = 'block'
+}
+
+let produtoEmEdicao = null; // Variável para armazenar o produto que está sendo editado
+
+// Abre o modal para editar o produto
+function editarProduto(produtoId) {
+    const produto = produtos.find(p => p.id === produtoId);
+    if (!produto) {
+        alert("Produto não encontrado.");
+        return;
+    }
+
+    // Armazena o produto atual em edição
+    produtoEmEdicao = produto;
+
+    // Preenche os campos do modal com os dados do produto
+    $("#editar-nome-produto").val(produto.nome);
+    $("#editar-preco-produto").val(produto.preco);
+    $("#imagem-preview").attr("src", produto.imagem).show();
+
+    // Exibe o modal
+    $("#modal-produto").show();
+}
+
+// Fecha o modal
+function fecharModalProduto() {
+    $("#modal-produto").hide();
+    produtoEmEdicao = null; // Limpa o produto em edição
+}
+
+// Salva as alterações feitas no modal
+function salvarAlteracoes() {
+    if (!produtoEmEdicao) return;
+
+    const novoNome = $("#editar-nome-produto").val();
+    const novoPreco = parseFloat($("#editar-preco-produto").val());
+    const imagemInput = document.getElementById("editar-imagem-produto");
+
+    if (!novoNome || isNaN(novoPreco)) {
+        alert("Preencha todos os campos corretamente.");
+        return;
+    }
+
+    produtoEmEdicao.nome = novoNome;
+    produtoEmEdicao.preco = novoPreco;
+
+    if (imagemInput.files[0]) {
+        const leitor = new FileReader();
+        leitor.onload = function (e) {
+            produtoEmEdicao.imagem = e.target.result;
+            renderizarProdutos();
+            fecharModalProduto();
+        };
+        leitor.readAsDataURL(imagemInput.files[0]);
+    } else {
+        renderizarProdutos();
+        fecharModalProduto();
+    }
+
+    alert("Produto atualizado com sucesso!");
+}
+
+// Remove o produto diretamente sem modal
+function excluirProduto(produtoId) {
+    const confirmacao = confirm("Tem certeza que deseja excluir este produto?");
+    if (confirmacao) {
+        const index = produtos.findIndex(p => p.id === produtoId);
+        if (index !== -1) {
+            produtos.splice(index, 1);
+            renderizarProdutos();
+            alert("Produto excluído com sucesso.");
+        }
+    }
 }

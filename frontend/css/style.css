@@ -1,0 +1,195 @@
+/* Estilo Geral */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header button {
+    background-color: white;
+    color: #4CAF50;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin: 0 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+header button:hover {
+    background-color: #45a049;
+    color: white;
+}
+
+/* Área Principal */
+main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Produtos */
+#produtos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.produto-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1rem;
+    width: 200px;
+    text-align: center;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.produto-card img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.produto-card h3 {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.produto-card button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.produto-card button:hover {
+    background-color: #45a049;
+}
+
+/* Carrinho */
+#carrinho table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+#carrinho th, #carrinho td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+#carrinho th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+#preco-total {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: right;
+}
+
+/* Painel do Administrador */
+#painel-admin {
+    background-color: #f4f4f4;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#painel-admin form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#painel-admin input, #painel-admin button {
+    padding: 0.5rem;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#painel-admin button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+
+#painel-admin button:hover {
+    background-color: #45a049;
+}
+
+/* Modal */
+#modal-login, #modal-registro {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    width: 400px;
+}
+
+#modal-login h2, #modal-registro h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+#modal-login input, #modal-registro input {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#modal-login button, #modal-registro button {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.7rem;
+    font-size: 16px;
+    margin-top: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#modal-login button:hover, #modal-registro button:hover {
+    background-color: #45a049;
+}
+
+/* Ocultar elementos */
+.oculto {
+    display: none;
+}
+
+.produto-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}

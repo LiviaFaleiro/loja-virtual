@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogo do if</title>
+    <link rel="stylesheet" href="/frontend/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Catálogo do IF</h1>
+        <button id="botaoLogin" onclick="alternarModalLogin()">Login</button>
+        <button id="botaoRegistro" onclick="alternarModalRegistro()">Registrar</button>
+        <button id="botaoLogout" style="display: none;" onclick="trocarUsuario()">Trocar Usuário</button>
+        <button id="botaoCarrinho" onclick="verCarrinho()">Carrinho</button>
+        <button id="TelaPrincipal" onclick="telaPrincipal()">Produtos</button>
+    </header>
+    
+    <main>
+        <section id="produtos" class="secao-usuario">
+            <h2>Produtos</h2>
+            <div id="lista-produtos">
+                <!-- Lista de produtos será preenchida aqui -->
+            </div>
+        </section>
+        <section id="carrinho" class="secao-usuario" style="display: none;">
+            <h2>Carrinho</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Preço</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="itens-carrinho">
+                    <!-- Itens do carrinho -->
+                </tbody>
+            </table>
+            <p id="preco-total">Total: R$ 0,00</p>
+        </section>
+    
+        <!-- Formulário para Administrador Adicionar Produtos -->
+        <section id="painel-admin" style="display: none;">
+            <h2>Painel do Administrador</h2>
+            <form id="form-produto">
+                <input type="text" id="nome-produto" placeholder="Nome do Produto" required>
+                <input type="number" id="preco-produto" placeholder="Preço" required>
+                <input type="file" id="imagem-produto" accept="image/*" required>
+                <button type="button" onclick="adicionarProduto()">Adicionar Produto</button>
+            </form>
+        </section>
+    </main>
+    
+
+    <!-- Modal de Login -->
+    <div id="modal-login" style="display: none;">
+        <form id="form-login">
+            <h2>Login</h2>
+            <input type="text" id="usuario" placeholder="Usuário" required>
+            <input type="password" id="senha" placeholder="Senha" required>
+            <button type="button" onclick="fazerLogin()">Entrar</button>
+        </form>
+    </div>
+
+    <!-- Modal de Registro -->
+    <div id="modal-registro" style="display: none;">
+        <form id="form-registro">
+            <h2>Registrar</h2>
+            <input type="text" id="usuario-registro" placeholder="Nome de Usuário" required>
+            <input type="text" id="email-registro" placeholder="E-mail" required>
+            <input type="password" id="senha-registro" placeholder="Senha" required>
+            <button type="button" onclick="fazerRegistro()">Registrar</button>
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/frontend/JavaScript/geral.js"></script>
+</body>
+</html>

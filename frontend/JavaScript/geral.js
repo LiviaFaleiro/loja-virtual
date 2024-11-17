@@ -14,8 +14,10 @@ var usuarioEncontrado = usuarios.find(u => u.usuario === usuario && u.senha === 
 function fazerLogin() {
     const usuario = $("#usuario").val();
     const senha = $("#senha").val();
+    $("#produtos").show(); 
+    $(".cabecalho").show(); 
 
-    const usuarioEncontrado = usuarios.find(u => u.usuario === usuario && u.senha === senha);
+    const usuarioEncontrado = usuarios.find(u => u.usuario === usuario && u.senha === senha); 
 
     if (usuarioEncontrado) {
         usuarioAtual = usuarioEncontrado; //usuário atual
@@ -34,22 +36,41 @@ function fazerLogin() {
 
         renderizarProdutos();
     } else {
-        alert("Usuário ou senha inválidos.");
+        // Exibe uma mensagem de erro e mantém o modal aberto
+        alert("Usuário ou senha inválidos. Por favor, tente novamente.");
+        $("#modal-login").show(); // Garante que o modal permaneça visível
+        $("#produtos").hide(); 
+        $(".cabecalho").hide(); 
     }
 }
 
 
+function trocarUsuario(){
+    $("#modal-login").show(); 
+    $("#produtos").hide();
+    $(".cabecalho").hide(); 
+    $("#painel-admin").hide(); 
+}
 
 function fazerRegistro() {
+    $("#modal-login").show(); 
+
     const usuario = $("#usuario-registro").val();
     const senha = $("#senha-registro").val();
+    const novoId = usuarios.length + 1; // Generate new ID
 
     if (usuarios.find(u => u.usuario === usuario)) {
         alert("Usuário já existe.");
         return;
     }
 
-    usuarios.push({ usuario, senha, tipo: "usuario" });
+    usuarios.push({ 
+        id: novoId,
+        usuario, 
+        senha, 
+        tipo: "usuario" 
+    });
+    
     alert("Usuário registrado com sucesso. Faça login!");
     $("#modal-registro").hide();
 }
@@ -277,7 +298,9 @@ function painelAdm(){
     $("#painel-admin").show();
     $("#produtos").hide();
     $("#carrinho").hide();
+    renderizarUsuarios(); // Add this line
 }
+
 
 function editarPerfil() {
     document.getElementById('produtos').style.display = 'none';
@@ -301,13 +324,68 @@ function atualizarPerfil() {
             usuarioAtual.senha = novaSenha;
         }
         alert('Perfil atualizado com sucesso!');
-        voltarPerfil();
+        voltar();
     } else {
         alert('Senha atual incorreta!');
     }
 }
 
-function voltarPerfil() {
+function voltar(){
     document.getElementById('perfil-usuario').style.display = 'none';
     document.getElementById('produtos').style.display = 'block';
+    $("#painel-admin").hide();
+    $("#carrinho").hide();
+}
+
+function login() {
+    $("#modal-login").show();
+    $("#modal-registro").hide();
+
+
+}
+function cadastro() {
+    $("#modal-login").hide();
+    $("#modal-registro").show();
+}
+
+function renderizarUsuarios() {
+    $("#lista-usuarios").html("");
+    
+    usuarios.forEach(usuario => {
+        $("#lista-usuarios").append(`
+            <tr>
+                <td>${usuario.id}</td>
+                <td>${usuario.usuario}</td>
+                <td>${usuario.email || 'N/A'}</td>
+                <td>${usuario.tipo}</td>
+                <td>
+                    <button onclick="alterarSenhaUsuario(${usuario.id})">Alterar Senha</button>
+                    <button onclick="excluirUsuario(${usuario.id})" class="btn-excluir">Excluir</button>
+                </td>
+            </tr>
+        `);
+    });
+}
+function excluirUsuario(userId) {
+    if (confirm("Tem certeza que deseja excluir este usuário?")) {
+        const index = usuarios.findIndex(u => u.id === userId);
+        if (index !== -1) {
+            usuarios.splice(index, 1);
+            renderizarUsuarios();
+            alert("Usuário excluído com sucesso!");
+        }
+    }
+}
+
+
+function alterarSenhaUsuario(userId) {
+    const usuario = usuarios.find(u => u.id === userId);
+    const novaSenha = prompt(`Digite a nova senha para o usuário ${usuario.usuario}:`);
+    
+    if (novaSenha) {
+        if (usuario) {
+            usuario.senha = novaSenha;
+            alert(`Senha alterada com sucesso para o usuário ${usuario.usuario}`);
+        }
+    }
 }

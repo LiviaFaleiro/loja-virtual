@@ -8,19 +8,19 @@
 </head>
 <body>
     <!--Comentadinho emilly please dont kill me-->
-    <header>
+    <header class="cabecalho" style="display: none;">
         <h1>Catálogo do IF</h1>
-        <button id="botaoLogin" onclick="alternarModalLogin()">Login</button>
-        <button id="botaoRegistro" onclick="alternarModalRegistro()">Registrar</button>
-        <button id="botaoLogout" style="display: none;" onclick="trocarUsuario()">Trocar Usuário</button>
+    
+        <button id="botaoLogout" onclick="trocarUsuario()">Trocar Usuário</button>
         <button id="botaoAdm" onclick="painelAdm()">Painel do Administrador</button>
         <button id="botaoCarrinho" onclick="verCarrinho()">Carrinho</button>
         <button id="TelaPrincipal" onclick="telaPrincipal()">Produtos</button>
         <button id="botaoPerfil" onclick="painelPerfil()">Perfil</button>
+        <button id="botaoCompras" onclick="minhasCompras()">Minhas Compras</button>
     </header>
     
     <main>
-        <section id="produtos" class="secao-usuario">
+        <section id="produtos" class="secao-usuario" style="display: none;">
             <h2>Catálogo</h2>
             <div id="lista-produtos">
                 <!-- Lista de produtos -->
@@ -42,6 +42,7 @@
                 </tbody>
             </table>
             <p id="preco-total">Total: R$ 0,00</p>
+            <button type="button" onclick="voltar()">Voltar</button>
         </section>
     
         <!--Administrador Adicionar Produtos -->
@@ -52,8 +53,27 @@
                 <input type="number" id="preco-produto" placeholder="Preço" required>
                 <input type="file" id="imagem-produto" accept="image/*" required>
                 <button type="button" onclick="adicionarProduto()">Adicionar Produto</button>
+            
             </form>
             <!--colocar aqui o dashboard de vendas aaaaaaaa-->
+            <div class="dashboard-usuarios">
+                <h3>Gerenciamento de Usuários</h3>
+                <table id="tabela-usuarios">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuário</th>
+                            <th>Email</th>
+                            <th>Tipo</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody id="lista-usuarios">
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" onclick="voltar()">Voltar</button>
         </section>
     </main>
     
@@ -65,17 +85,19 @@
             <input type="text" id="usuario" placeholder="Usuário" required>
             <input type="password" id="senha" placeholder="Senha" required>
             <button type="button" onclick="fazerLogin()">Entrar</button>
+            <a onclick="cadastro()">Não possui uma conta? Faça cadastro.</a>
         </form>
     </div>
 
     <!-- Modal de Registro -->
-    <div id="modal-registro" style="display: none;">
+    <div id="modal-registro" style="display: block;">
         <form id="form-registro">
             <h2>Registrar</h2>
             <input type="text" id="usuario-registro" placeholder="Nome de Usuário" required>
             <input type="text" id="email-registro" placeholder="E-mail" required>
             <input type="password" id="senha-registro" placeholder="Senha" required>
             <button type="button" onclick="fazerRegistro()">Registrar</button>
+            <a onclick="login()">Já tem uma conta? Faça login aqui.</a>
         </form>
     </div>
 
@@ -126,12 +148,14 @@
                 <input type="password" id="nova-senha" name="novaSenha">
             </div>
             <button type="button" onclick="atualizarPerfil()">Salvar Alterações</button>
-            <button type="button" onclick="voltarPerfil()">Voltar</button>
+            <button type="button" onclick="voltar()">Voltar</button>
         </form>
     </div>
 </section>
 
+<section id="modal-compras" style="display: none;">
 
+</section>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="/frontend/JavaScript/geral.js"></script>

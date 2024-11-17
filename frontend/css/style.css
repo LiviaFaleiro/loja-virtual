@@ -1,34 +1,39 @@
 /* Estilo Geral */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     color: #333;
+    overflow-x: hidden;
 }
 
 header {
-    background-color: #4CAF50;
+    background: linear-gradient(90deg, #FF77B7, #FFA24C);
     color: white;
     padding: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 header button {
     background-color: white;
-    color: #4CAF50;
-    border: none;
+    color: #FF77B7;
+    border: 2px solid #FF77B7;
     padding: 0.5rem 1rem;
-    margin: 0 5px;
     cursor: pointer;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
 }
 
 header button:hover {
-    background-color: #45a049;
+    background-color: #FF77B7;
     color: white;
 }
 
@@ -37,68 +42,92 @@ main {
     padding: 2rem;
     max-width: 1200px;
     margin: auto;
+    text-align: center;
 }
 
 /* Produtos */
 #produtos {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    gap: 2rem;
+    justify-content: center;
 }
 
 .produto-card {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 1rem;
-    width: 200px;
+    border: none;
+    border-radius: 10px;
+    padding: 1.5rem;
+    width: 220px;
     text-align: center;
-    background-color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(145deg, #FEEC37, #FFA24C);
+    color: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+.produto-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
 
 .produto-card img {
     width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-    border-radius: 5px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border-radius: 10px;
 }
 
 .produto-card h3 {
-    font-size: 18px;
-    margin: 10px 0;
+    font-size: 20px;
+    margin-bottom: 15px;
 }
 
 .produto-card button {
-    background-color: #4CAF50;
+    background-color: #FF77B7;
     color: white;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.7rem 1.5rem;
     cursor: pointer;
     font-size: 14px;
-    border-radius: 5px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
 }
 
 .produto-card button:hover {
-    background-color: #45a049;
+    background-color: white;
+    color: #FF77B7;
+    border: 2px solid #FF77B7;
 }
 
 /* Carrinho */
 #carrinho table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 1rem;
+    margin-top: 2rem;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 #carrinho th, #carrinho td {
-    border: 1px solid #ddd;
-    padding: 8px;
+    padding: 1rem;
     text-align: center;
 }
 
 #carrinho th {
-    background-color: #f4f4f4;
+    background-color: #FFA24C;
+    color: white;
     font-weight: bold;
+}
+
+button {
+    font-family: 'Roboto', sans-serif;
+    transition: transform 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.1);
 }
 
 #preco-total {
@@ -129,13 +158,18 @@ main {
 }
 
 #painel-admin button {
-    background-color: #4CAF50;
+    background-color: #FFA24C;
     color: white;
+    border: none;
+    padding: 0.7rem;
     cursor: pointer;
+    font-size: 14px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
 }
 
 #painel-admin button:hover {
-    background-color: #45a049;
+    background-color: #FF77B7;
 }
 
 /* Modal */
@@ -144,10 +178,10 @@ main {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: white;
+    background: linear-gradient(145deg, #B1D690, #FEEC37);
     padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     display: none;
     width: 400px;
 }
@@ -155,6 +189,7 @@ main {
 #modal-login h2, #modal-registro h2 {
     text-align: center;
     margin-bottom: 1rem;
+    color: white;
 }
 
 #modal-login input, #modal-registro input {
@@ -166,19 +201,15 @@ main {
 }
 
 #modal-login button, #modal-registro button {
-    width: 100%;
-    background-color: #4CAF50;
+    background-color: #FF77B7;
     color: white;
-    border: none;
-    padding: 0.7rem;
-    font-size: 16px;
-    margin-top: 1rem;
-    cursor: pointer;
-    border-radius: 5px;
+    padding: 0.7rem 1.5rem;
+    border-radius: 20px;
 }
 
 #modal-login button:hover, #modal-registro button:hover {
-    background-color: #45a049;
+    background-color: #FEEC37;
+    color: #333;
 }
 
 /* Ocultar elementos */
@@ -332,5 +363,48 @@ main {
         padding: 8px;
         border: 1px solid #ddd;
         border-radius: 4px;
+    }
+    
+    .dashboard-usuarios {
+        margin-top: 20px;
+        padding: 20px;
+    }
+    
+    #tabela-usuarios {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    
+    #tabela-usuarios th, #tabela-usuarios td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    
+    #tabela-usuarios th {
+        background-color: #f4f4f4;
+    }
+    
+    #tabela-usuarios button {
+        padding: 5px 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    
+    #tabela-usuarios button:hover {
+        background-color: #45a049;
+    }
+    
+    .btn-excluir {
+        background-color: #ff4444 !important;
+        margin-left: 5px;
+    }
+    
+    .btn-excluir:hover {
+        background-color: #cc0000 !important;
     }
     

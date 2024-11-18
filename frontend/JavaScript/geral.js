@@ -23,27 +23,28 @@ function verCarrinho(){
 }
 
 function telaPrincipal(){
-     document.getElementById('carrinho').style.display = 'none'
-     document.getElementById('produtos').style.display = 'block'
-     $("#painel-admin").hide();
-     $("#perfil-usuario").hide();
+    document.getElementById('carrinho').style.display = 'none'
+    document.getElementById('produtos').style.display = 'block'
+    $("#painel-admin").hide();
+    $("#perfil-usuario").hide();
+    carregarCategoriasParaFiltro(); // Add this line
 }
-
-
-
-
 
 function painelPerfil(){
     $("#produtos").hide();
     $("#perfil-usuario").show();
 }
 
-function painelAdm(){
+function painelAdm() {
     $("#painel-admin").show();
     $("#produtos").hide();
     $("#carrinho").hide();
-    renderizarUsuarios(); // Add this line
+    renderizarUsuarios();
+    renderizarCategorias();
+    renderizarProdutosAdmin();
+    atualizarSelectCategorias();
 }
+
 
 
 function voltar(){

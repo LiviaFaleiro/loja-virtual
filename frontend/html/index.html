@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/frontend/css/style.css">
 </head>
 <body>
+    <!--pai nosso que está no céu...
+    como essa bomba vai ser conectada no banco?-->
     <!--Comentadinho emilly please dont kill me-->
     <header class="cabecalho" style="display: none;">
         <h1>Catálogo do IF</h1>
@@ -22,6 +24,12 @@
     <main>
         <section id="produtos" class="secao-usuario" style="display: none;">
             <h2>Catálogo</h2>
+            <div class="filtro-categoria">
+                <select id="filtro-categoria" onchange="filtrarPorCategoria()">
+                    <option value="">Todas as categorias</option>
+                </select>
+            </div>
+            
             <div id="lista-produtos">
                 <!-- Lista de produtos -->
             </div>
@@ -51,11 +59,31 @@
             <form id="form-produto">
                 <input type="text" id="nome-produto" placeholder="Nome do Produto" required>
                 <input type="number" id="preco-produto" placeholder="Preço" required>
+                <select id="categoria-produto" required>
+                    <option value="">Selecione uma categoria</option>
+                </select>
                 <input type="file" id="imagem-produto" accept="image/*" required>
                 <button type="button" onclick="adicionarProduto()">Adicionar Produto</button>
-            
             </form>
-            <!--colocar aqui o dashboard de vendas aaaaaaaa-->
+            
+            <div class="gerenciar-categorias">
+                <h3>Gerenciar Categorias</h3>
+                <div class="nova-categoria">
+                    <input type="text" id="nome-categoria" placeholder="Nome da Categoria">
+                    <button onclick="adicionarCategoria()">Adicionar Categoria</button>
+                </div>
+                <table id="tabela-categorias">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-categorias"></tbody>
+                </table>
+            </div>
+            
             <div class="dashboard-usuarios">
                 <h3>Gerenciamento de Usuários</h3>
                 <table id="tabela-usuarios">
@@ -73,6 +101,22 @@
                     </tbody>
                 </table>
             </div>
+            <div class="dashboard-produtos">
+                <h3>Produtos Cadastrados</h3>
+                <table id="tabela-produtos-admin">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Preço</th>
+                            <th>Categoria</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-produtos-admin"></tbody>
+                </table>
+            </div>
+            
             <button type="button" onclick="voltar()">Voltar</button>
         </section>
     </main>
@@ -164,6 +208,7 @@
     <script src="/frontend/JavaScript/perfil.js"></script>
     <script src="/frontend/JavaScript/produto.js"></script>
     <script src="/frontend/JavaScript/usuarios.js"></script>
-    
+    <script src="/frontend/JavaScript/categoria.js"></script>
+
 </body>
 </html>

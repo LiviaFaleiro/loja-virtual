@@ -8,7 +8,7 @@ function fazerLogin() {
     const usuarioEncontrado = usuarios.find(u => u.usuario === usuario && u.senha === senha); 
 
     if (usuarioEncontrado) {
-        usuarioAtual = usuarioEncontrado; //usuário atual
+        usuarioAtual = usuarioEncontrado;
         alert(`Bem-vindo, ${usuarioAtual.usuario}`);
         $("#modal-login").hide();
 
@@ -22,15 +22,16 @@ function fazerLogin() {
             $("#botaoPerfil").show(); 
         }
 
+        carregarCategoriasParaFiltro();
         renderizarProdutos();
     } else {
-        // Exibe uma mensagem de erro e mantém o modal aberto
         alert("Usuário ou senha inválidos. Por favor, tente novamente.");
-        $("#modal-login").show(); // Garante que o modal permaneça visível
+        $("#modal-login").show();
         $("#produtos").hide(); 
         $(".cabecalho").hide(); 
     }
 }
+
 
 //cadastro
 function fazerRegistro() {

@@ -1,8 +1,8 @@
 // Renderiza os produtos
-function renderizarProdutos() {
-    $("#lista-produtos").html(""); // Limpa a lista de produtos
+function renderizarProdutos(produtosParaMostrar = produtos) {
+    $("#lista-produtos").html("");
 
-    produtos.forEach(produto => {
+    produtosParaMostrar.forEach(produto => {
         let produtoHTML = `
             <div class="produto-card">
                 <img src="${produto.imagem}" alt="${produto.nome}" />
@@ -11,21 +11,18 @@ function renderizarProdutos() {
         `;
 
         if (usuarioAtual && usuarioAtual.tipo === 'admin') {
-            // Botões para admin
             produtoHTML += `
                 <button onclick="editarProduto(${produto.id})">Editar Produto</button>
                 <button onclick="excluirProduto(${produto.id})">Excluir Produto</button>
             `;
         } else if (usuarioAtual && usuarioAtual.tipo === 'usuario') {
-           
             produtoHTML += `<button onclick="adicionarAoCarrinho(${produto.id})">Adicionar ao Carrinho</button>`;
         }
 
-        produtoHTML += `</div>`; // Fecha o card do produto
-        $("#lista-produtos").append(produtoHTML); 
+        produtoHTML += `</div>`;
+        $("#lista-produtos").append(produtoHTML);
     });
 }
-
 
 // Adiciona um produto (somente admin)
 function adicionarProduto() {
@@ -36,13 +33,13 @@ function adicionarProduto() {
 
     const nome = $("#nome-produto").val();
     const preco = parseFloat($("#preco-produto").val());
+    const categoriaId = parseInt($("#categoria-produto").val());
     const imagemInput = document.getElementById("imagem-produto");
 
-    if (!nome || !preco || isNaN(preco) || !imagemInput.files[0]) {
+    if (!nome || !preco || isNaN(preco) || !categoriaId || !imagemInput.files[0]) {
         alert("Preencha todos os campos corretamente.");
         return;
     }
-
 
     const leitor = new FileReader();
     leitor.onload = function (e) {
@@ -50,7 +47,8 @@ function adicionarProduto() {
             id: produtos.length + 1,
             nome,
             preco,
-            imagem: e.target.result, // Salva a imagem como base64
+            categoriaId,
+            imagem: e.target.result,
         };
 
         produtos.push(produto);
@@ -129,4 +127,24 @@ function excluirProduto(produtoId) {
             alert("Produto excluído com sucesso.");
         }
     }
+}
+
+function renderizarProdutosAdmin() {
+    $("#lista-produtos-admin").html("");
+    
+    produtos.forEach(produto => {
+        const categoria = categorias.find(c => c.id === produto.categoriaId);
+        $("#lista-produtos-admin").append(`
+            <tr>
+                <td>${produto.id}</td>
+                <td>${produto.nome}</td>
+                <td>R$ ${produto.preco.toFixed(2)}</td>
+                <td>${categoria ? categoria.nome : 'Sem categoria'}</td>
+                <td>
+                    <button onclick="editarProduto(${produto.id})">Editar</button>
+                    <button onclick="excluirProduto(${produto.id})" class="btn-excluir">Excluir</button>
+                </td>
+            </tr>
+        `);
+    });
 }

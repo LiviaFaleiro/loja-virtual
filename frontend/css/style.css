@@ -408,3 +408,56 @@ button:hover {
         background-color: #cc0000 !important;
     }
     
+    .gerenciar-categorias {
+        margin-top: 20px;
+        padding: 20px;
+    }
+    
+    .nova-categoria {
+        margin-bottom: 15px;
+    }
+    
+    #tabela-categorias {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    #categoria-produto {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+    }
+    
+    .filtro-categoria {
+        margin: 20px 0;
+        text-align: center;
+    }
+    
+    #filtro-categoria {
+        padding: 8px;
+        width: 200px;
+        border-radius: 4px;
+    }
+    
+    .dashboard-produtos {
+        margin-top: 20px;
+        padding: 20px;
+    }
+    
+    #tabela-produtos-admin {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    
+    #tabela-produtos-admin th, 
+    #tabela-produtos-admin td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    
+    #tabela-produtos-admin th {
+        background-color: #f4f4f4;
+    }
+    

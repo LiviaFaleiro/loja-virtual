@@ -60,6 +60,8 @@ function adicionarProduto() {
 }
 
 // Abre o modal para editar o produto
+let produtoEmEdicao = null;
+
 function editarProduto(produtoId) {
     const produto = produtos.find(p => p.id === produtoId);
     if (!produto) {
@@ -67,17 +69,13 @@ function editarProduto(produtoId) {
         return;
     }
 
-    let produtoEmEdicao = null; // Variável para armazenar o produto que está sendo editado
     produtoEmEdicao = produto;
 
     $("#editar-nome-produto").val(produto.nome);
     $("#editar-preco-produto").val(produto.preco);
     $("#imagem-preview").attr("src", produto.imagem).show();
-
-
     $("#modal-produto").show();
 }
-
 
 function fecharModalProduto() {
     $("#modal-produto").hide();
@@ -105,26 +103,25 @@ function salvarAlteracoes() {
         leitor.onload = function (e) {
             produtoEmEdicao.imagem = e.target.result;
             renderizarProdutos();
+            renderizarProdutosAdmin();
             fecharModalProduto();
         };
         leitor.readAsDataURL(imagemInput.files[0]);
     } else {
         renderizarProdutos();
+        renderizarProdutosAdmin();
         fecharModalProduto();
     }
-
-    alert("Produto atualizado com sucesso!");
 }
 
-
 function excluirProduto(produtoId) {
-    const confirmacao = confirm("Tem certeza que deseja excluir este produto?");
-    if (confirmacao) {
+    if (confirm("Tem certeza que deseja excluir este produto?")) {
         const index = produtos.findIndex(p => p.id === produtoId);
         if (index !== -1) {
             produtos.splice(index, 1);
             renderizarProdutos();
-            alert("Produto excluído com sucesso.");
+            renderizarProdutosAdmin();
+            alert("Produto excluído com sucesso!");
         }
     }
 }

@@ -35,22 +35,26 @@
             </div>
         </section>
         <section id="carrinho" class="secao-usuario" style="display: none;">
-            <h2>Carrinho</h2>
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Produto</th>
-                        <th>Quantidade</th>
-                        <th>Preço</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody id="itens-carrinho">
-                    <!-- Itens do carrinho -->
-                </tbody>
-            </table>
-            <p id="preco-total">Total: R$ 0,00</p>
-            <button type="button" onclick="voltar()">Voltar</button>
+            <div class="carrinho-container">
+                <h2>Carrinho de Compras</h2>
+                <table class="tabela-carrinho">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Preço</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="itens-carrinho">
+                        <!-- Items will be inserted here dynamically -->
+                    </tbody>
+                </table>
+                <div class="carrinho-footer">
+                    <div id="preco-total">Total: R$ 0.00</div>
+                </div>
+            </div>
+            
         </section>
     
         <!--Administrador Adicionar Produtos -->
@@ -116,6 +120,23 @@
                     <tbody id="lista-produtos-admin"></tbody>
                 </table>
             </div>
+
+            <div class="admin-panel">
+                <h3>Painel Administrativo - Resumo de Vendas</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Produto</th>
+                            <th>Nome Produto</th>
+                            <th>Total Vendido</th>
+                            <th>Compradores</th>
+                        </tr>
+                    </thead>
+                    <tbody id="estatisticas-vendas">
+                    </tbody>
+                </table>
+            </div>
+            
             
             <button type="button" onclick="voltar()">Voltar</button>
         </section>
@@ -209,6 +230,7 @@
     <script src="/frontend/JavaScript/produto.js"></script>
     <script src="/frontend/JavaScript/usuarios.js"></script>
     <script src="/frontend/JavaScript/categoria.js"></script>
+    <script src="/frontend/JavaScript/vendas.js"></script>
 
 </body>
 </html>

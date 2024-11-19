@@ -11,7 +11,6 @@ function adicionarAoCarrinho(produtoId) {
     renderizarCarrinho();
 }
 
-
 function removerDoCarrinho(produtoId) {
     const item = carrinho.find(item => item.id === produtoId);
     if (item.quantidade > 1) {
@@ -22,7 +21,33 @@ function removerDoCarrinho(produtoId) {
     renderizarCarrinho();
 }
 
+let vendas = [];
 
+function finalizarCompra() {
+    if (carrinho.length === 0) {
+        alert("Seu carrinho está vazio!");
+        return;
+    }
+
+    const precoTotal = carrinho.reduce((total, item) => total + (item.preco * item.quantidade), 0);
+    const nomeCliente = prompt("Digite seu nome para finalizar a compra:");
+    
+    if (nomeCliente && confirm(`Confirmar compra no valor total de R$ ${precoTotal.toFixed(2)}?`)) {
+        const novaVenda = {
+            id: vendas.length + 1,
+            data: new Date().toLocaleString(),
+            nomeCliente: nomeCliente,
+            itens: carrinho,
+            total: precoTotal
+        };
+
+        vendas.push(novaVenda);
+        mostrarEstatisticasVendas();
+        carrinho = [];
+        renderizarCarrinho();
+        alert("Compra realizada com sucesso!");
+    }
+}
 
 function renderizarCarrinho() {
     $("#itens-carrinho").html("");
@@ -35,18 +60,31 @@ function renderizarCarrinho() {
                 <td>${item.nome}</td>
                 <td>${item.quantidade}</td>
                 <td>R$ ${(item.preco * item.quantidade).toFixed(2)}</td>
-                <td><button onclick="removerDoCarrinho(${item.id})">Remover</button></td>
+                <td>
+                    <button onclick="removerDoCarrinho(${item.id})">Remover</button>
+                </td>
             </tr>
         `);
     });
 
     $("#preco-total").text(`Total: R$ ${precoTotal.toFixed(2)}`);
+    
+    // Add purchase button if cart is not empty
+    if (carrinho.length > 0) {
+        $("#itens-carrinho").append(`
+            <tr>
+                <td colspan="4">
+                    <button onclick="finalizarCompra()" class="btn-finalizar">Finalizar Compra</button>
+                </td>
+            </tr>
+        `);
+    }
 }
 
 
 $(document).ready(() => {
     $("#botaoPerfil").hide();
     $("#botaoAdm").hide();
-    $("#botaoCarrinho").hide();
+    $("#botaoCarrinho").show(); // Show cart button
     renderizarProdutos();
 });

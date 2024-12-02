@@ -3,28 +3,29 @@ package com.lojinha.demo.model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.ArrayList;
 import java.sql.ResultSet;
 
 public class Usuario {
+    private int id;
     private String nome;
     private String email;
     private String senha;
-    private int id;
+    private String tipo;
 
-    public String getNome() {
-        return nome;
+    public String getTipo() {
+        return tipo;
+    }
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
+    
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -32,7 +33,6 @@ public class Usuario {
     public String getSenha() {
         return senha;
     }
-
     public void setSenha(String senha) {
         this.senha = senha;
     }
@@ -40,157 +40,138 @@ public class Usuario {
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
+    public String getNome() {
+        return nome;
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-    public void insert() {
+    public void salvar() {
         Conexao c = new Conexao();
         Connection dbConn = c.getConexao();
-        String sql = "INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO usuario (nome, email, senha, tipo) VALUES (?, ?, ?, ?)";
+
         try {
             PreparedStatement pstmt = dbConn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, this.nome);
             pstmt.setString(2, this.email);
             pstmt.setString(3, this.senha);
+            pstmt.setString(4, this.tipo); // Certifique-se de ter o atributo 'tipo' na classe Usuario
+
             pstmt.executeUpdate();
             ResultSet generatedKeys = pstmt.getGeneratedKeys();
             if (generatedKeys.next()) {
                 this.id = generatedKeys.getInt(1);
             }
         } catch (SQLException e) {
+            System.err.println("Erro ao inserir no banco de dados:");
+            System.err.println("Mensagem de erro: " + e.getMessage());
+            System.err.println("SQL State: " + e.getSQLState());
+            System.err.println("Código de erro: " + e.getErrorCode());
             e.printStackTrace();
-
         }
+        
     }
 
-    public void update() {
+
+    public void update(){  
         Conexao c = new Conexao();
         Connection dbConn = c.getConexao();
-    
-     
-        if (dbConn == null) {
-            throw new RuntimeException("Falha ao conectar ao banco de dados");
-        }
-    
-   
-        Usuario usuarioExistente = Usuario.findById(this.id);
-        if (usuarioExistente == null) {
-            throw new RuntimeException("Usuário com ID " + this.id + " não encontrado.");
-        }
-    
-     
-        if (this.nome == null || this.nome.isEmpty()) {
-            this.nome = usuarioExistente.getNome();
-        }
-        if (this.email == null || this.email.isEmpty()) {
-            this.email = usuarioExistente.getEmail();
-        }
-        if (this.senha == null || this.senha.isEmpty()) {
-            this.senha = usuarioExistente.getSenha();
-        }
-    
+
         String sql = "UPDATE usuario SET nome = ?, email = ?, senha = ? WHERE id = ?";
-    
+
         try {
-            PreparedStatement pstmt = dbConn.prepareStatement(sql);
-    
-            pstmt.setString(1, this.nome);
-            pstmt.setString(2, this.email);
-            pstmt.setString(3, this.senha);
-            pstmt.setInt(4, this.id);
-    
-            int rowsAffected = pstmt.executeUpdate();
-            if (rowsAffected == 0) {
-                System.out.println("Nenhum usuário encontrado com o ID: " + this.id);
-            } else {
-                System.out.println("Usuário atualizado com sucesso.");
-            }
-    
+            PreparedStatement  ps = dbConn.prepareStatement(sql);
+            ps.setString(1, this.nome);
+            ps.setString(2, this.email);
+            ps.setString(3, this.senha);
+            ps.setInt(4, this.id);
+            ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    
-    
 
-    public void delete() {
+    public void delete(){   
         Conexao c = new Conexao();
-        Connection dbConn = (Connection) c.getConexao();
+        Connection dbConn = c.getConexao();
 
         String sql = "DELETE FROM usuario WHERE id = ?";
-
-        try (PreparedStatement pstmt = dbConn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, this.id);
-
-            pstmt.executeUpdate();
-
+        try {
+            PreparedStatement  ps = dbConn.prepareStatement(sql);
+            ps.setInt(1, this.id);
+            ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static List<Usuario> getAll() {
-        List<Usuario> usuarios = new ArrayList<>();
+    public void load(){
         Conexao c = new Conexao();
         Connection dbConn = c.getConexao();
-
-        String sql = "SELECT id, nome, email, senha FROM usuario";
+        String sql = "SELECT * FROM usuario WHERE id = ?";
         try {
-            PreparedStatement pstmt = dbConn.prepareStatement(sql);
-            ResultSet rs = pstmt.executeQuery();
+            PreparedStatement  ps = dbConn.prepareStatement(sql);
+            ps.setInt(1, this.id);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                this.nome = rs.getString("nome");
+                this.email = rs.getString("email");
+                this.senha = rs.getString("senha");
+                this.tipo = rs.getString("tipo");
 
-            while (rs.next()) {
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static ArrayList<Usuario> getAll(){
+        Conexao c = new Conexao();
+        Connection dbConn = c.getConexao();
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+    
+        String sql = "SELECT * FROM usuario";
+        try {
+            Statement st = dbConn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next()){
                 Usuario usuario = new Usuario();
                 usuario.setId(rs.getInt("id"));
                 usuario.setNome(rs.getString("nome"));
                 usuario.setEmail(rs.getString("email"));
                 usuario.setSenha(rs.getString("senha"));
+                usuario.setTipo(rs.getString("tipo")); // Configura o tipo
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return usuarios;
     }
+    
 
-   
-    public static Usuario findById(int id) {
-        Usuario usuario = null; 
+    @Override
+    public String toString() {
+        return "Usuario [id=" + id + ", nome=" + nome + "email=" + email + "senha=" + senha + "]";
+    }
+
+    public void updateSenha() { // atualiza senha (admin)
         Conexao c = new Conexao();
         Connection dbConn = c.getConexao();
-    
-        if (dbConn == null) {
-            throw new RuntimeException("Falha ao conectar ao banco de dados.");
-        }
-    
-        String sql = "SELECT id, nome, email, senha FROM usuario WHERE id = ?";
-    
+        String sql = "UPDATE usuario SET senha = ? WHERE id = ?";
+        
         try {
-            PreparedStatement pstmt = dbConn.prepareStatement(sql);
-            pstmt.setInt(1, id); 
-    
-            ResultSet rs = pstmt.executeQuery();
-    
-      
-            if (rs.next()) {
-                usuario = new Usuario();
-                usuario.setId(rs.getInt("id"));
-                usuario.setNome(rs.getString("nome"));
-                usuario.setEmail(rs.getString("email"));
-                usuario.setSenha(rs.getString("senha"));
-            }
-    
+            PreparedStatement ps = dbConn.prepareStatement(sql);
+            ps.setString(1, this.senha);
+            ps.setInt(2, this.id);
+            ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Erro ao buscar usuário por ID.", e);
         }
-    
-        return usuario;
     }
     
-
 }

@@ -1,35 +1,53 @@
 package com.lojinha.demo.controller;
 
-import java.util.List;
+import java.util.ArrayList;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.lojinha.demo.model.Categoria;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class CategoriaController {
 
-    @PostMapping("/categoria/criar")
-    public Categoria cadastrar(Categoria categoria) {
-        categoria.insert();
+    private Categoria categoria;
+   @PostMapping("categoria/cadastrar")
+   public Categoria cadastrar(Categoria categoria) {
+        categoria.salvar();
         return categoria;
-    }
+   }
+   
+   @GetMapping("categorias")
+   public ArrayList<Categoria> visualizar() {
+        return Categoria.getAll(); 
+   }
 
-    @PostMapping("/categoria/atualizar")
-    public Categoria atualizar(Categoria categoria) {
-        categoria.update();
-        return categoria;
+   @GetMapping("/categoria/{id}")
+   public Categoria getOne(@PathVariable int id){
+    if (this.categoria == null) {
+        this.categoria = new Categoria();
     }
+        this.categoria.setId(id);
+        this.categoria.load();
 
-    @PostMapping("/categoria/excluir")
-    public Categoria excluir(Categoria categoria) {
-        categoria.delete();
-        return categoria;
-    }
+        return this.categoria;
+   }
 
-    @GetMapping("/categoria/pegar")
-    public List<Categoria> getAllCategoria() {
-        return Categoria.getAll();
-    }
+   @PostMapping("/categoria/atualizar")
+   public Categoria atualizar(Categoria categoria) {
+       categoria.update();
+
+       return categoria;
+   }
+   
+   @PostMapping("/categoria/deletar")
+   public Categoria deletar(Categoria categoria) {
+       categoria.delete();
+
+       return categoria;
+   }
+
 }

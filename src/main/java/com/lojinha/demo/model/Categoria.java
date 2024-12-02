@@ -4,12 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Categoria {
+
     private int id;
-    private String descricao;
+    private String nome;
+    private ArrayList<Produto> produtos;
 
     public int getId() {
         return id;
@@ -19,28 +22,53 @@ public class Categoria {
         this.id = id;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getNome() {
+        return nome;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public void insert() {
+    public ArrayList<Produto> getProdutos() {
+        if (this.produtos == null) {
+       
+        }
+        return produtos;
+    }
+
+    public void setProdutos(ArrayList<Produto> produtos) {
+        this.produtos = produtos;
+    }
+
+    public void salvar() {
         Conexao c = new Conexao();
-        Connection dbConn = c.getConexao();
-        String sql = "INSERT INTO categoria (descricao) VALUES (?)";
-        try {
-            PreparedStatement pstmt = dbConn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, this.descricao);
+        Connection dbCon = c.getConexao();
 
-            pstmt.executeUpdate();
-            ResultSet generatedKeys = pstmt.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                this.id = generatedKeys.getInt(1);
+        String sql = "INSERT INTO categoria (nome) VALUES (?)";
+
+        try {
+            PreparedStatement stmt = dbCon.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, this.getNome());
+            stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                this.id = rs.getInt(1);
             }
-        } catch (SQLException e) {
+
+          
+            for (Produto produto : this.produtos) {
+        
+                String sqlInsertCategoriaProduto = "INSERT INTO categoria_produto (categoria_id, produto_id) VALUES (?, ?)";
+                PreparedStatement stmtCategoriaProduto = dbCon.prepareStatement(sqlInsertCategoriaProduto);
+                stmtCategoriaProduto.setInt(1, this.id); // id da categoria
+                stmtCategoriaProduto.setInt(2, produto.getId()); // id do produto
+                stmtCategoriaProduto.executeUpdate();
+            }
+
+        } catch (Exception e) {
+            System.out.println("Problema na inserção de uma Categoria");
             e.printStackTrace();
         }
     }
@@ -49,33 +77,13 @@ public class Categoria {
         Conexao c = new Conexao();
         Connection dbConn = c.getConexao();
     
-        if (dbConn == null) {
-            throw new RuntimeException("Falha ao conectar ao banco de dados");
-        }
+        String sql = "UPDATE categoria SET nome = ? WHERE id = ?";
     
- 
-        Categoria categoriaExistente = findById(this.id);
-        if (categoriaExistente == null) {
-            throw new RuntimeException("Categoria com ID " + this.id + " não encontrada.");
-        }
-    
-
-        if (this.descricao == null || this.descricao.isEmpty()) {
-            this.descricao = categoriaExistente.getDescricao(); // Mantém o valor atual
-        }
-    
-        String sql = "UPDATE categoria SET descricao = ? WHERE id = ?";
-    
-        try (PreparedStatement pstmt = dbConn.prepareStatement(sql)) {
-            pstmt.setString(1, this.descricao);
-            pstmt.setInt(2, this.id);
-    
-            int rowsAffected = pstmt.executeUpdate();
-            if (rowsAffected == 0) {
-                System.out.println("Nenhuma categoria encontrada com o ID: " + this.id);
-            } else {
-                System.out.println("Categoria atualizada com sucesso.");
-            }
+        try {
+            PreparedStatement ps = dbConn.prepareStatement(sql);
+            ps.setString(1, this.nome);
+            ps.setInt(2, this.id);
+            ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -87,28 +95,46 @@ public class Categoria {
         Connection dbConn = c.getConexao();
 
         String sql = "DELETE FROM categoria WHERE id = ?";
-
-        try (PreparedStatement pstmt = dbConn.prepareStatement(sql)) {
-            pstmt.setInt(1, this.id);
-            pstmt.executeUpdate();
+        try {
+            PreparedStatement ps = dbConn.prepareStatement(sql);
+            ps.setInt(1, this.id);
+            ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static List<Categoria> getAll() {
-        List<Categoria> categorias = new ArrayList<>();
+   
+
+    public void load() {
         Conexao c = new Conexao();
         Connection dbConn = c.getConexao();
-        
-        String sql = "SELECT id, descricao FROM categoria";
-        
-        try (PreparedStatement pstmt = dbConn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+        String sql = "SELECT * FROM produto WHERE id = ?";
+        try {
+            PreparedStatement pstmt = dbConn.prepareStatement(sql);
+            pstmt.setInt(1, this.id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                this.setNome(rs.getString("nome"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList<Categoria> getAll() {
+        Conexao c = new Conexao();
+        Connection dbConn = c.getConexao();
+        ArrayList<Categoria> categorias = new ArrayList<>();
+
+        String sql = "SELECT * FROM categoria";
+        try {
+            Statement st = dbConn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 Categoria categoria = new Categoria();
                 categoria.setId(rs.getInt("id"));
-                categoria.setDescricao(rs.getString("descricao"));
+                categoria.setNome(rs.getString("nome"));
                 categorias.add(categoria);
             }
         } catch (SQLException e) {
@@ -117,30 +143,10 @@ public class Categoria {
         return categorias;
     }
 
-    public static Categoria findById(int id) {
-        Categoria categoria = null;
-        Conexao c = new Conexao();
-        Connection dbConn = c.getConexao();
-
-        if (dbConn == null) {
-            throw new RuntimeException("Falha ao conectar ao banco de dados.");
-        }
-
-        String sql = "SELECT id, descricao FROM categoria WHERE id = ?";
-
-        try (PreparedStatement pstmt = dbConn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                categoria = new Categoria();
-                categoria.setId(rs.getInt("id"));
-                categoria.setDescricao(rs.getString("descricao"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return categoria;
+    @Override
+    public String toString() {
+        return "Usuario [id=" + id + ", nome=" + nome + "]";
     }
+
 }
+

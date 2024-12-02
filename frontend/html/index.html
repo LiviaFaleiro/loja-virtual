@@ -1,26 +1,35 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogo do if</title>
     <link rel="stylesheet" href="/frontend/css/style.css">
+    <link rel="stylesheet" href="/frontend/css/painelAdmin.css">
+    <link rel="stylesheet" href="/frontend/css/pedidosFeitos.css">
+    <link rel="stylesheet" href="/frontend/css/adminProdutosCadastrados.css">
+    <link rel="stylesheet" href="/frontend/css/gerenciamentoUsuarios.css">
+    <link rel="stylesheet" href="/frontend/css/gerenciarCategoria.css">
 </head>
+
 <body>
     <!--pai nosso que está no céu...
     como essa bomba vai ser conectada no banco?-->
-    <!--Comentadinho emilly please dont kill me-->
+    <!--Comentadinho emilly please dont kill me
+    Vou pensar no teu caso Lívia-->
     <header class="cabecalho" style="display: none;">
         <h1>Catálogo do IF</h1>
-    
+
         <button id="botaoLogout" onclick="trocarUsuario()">Trocar Usuário</button>
         <button id="botaoAdm" onclick="painelAdm()">Painel do Administrador</button>
+        <button id="botaoMediaVendas" onclick="painelVendas()">Média de Vendas</button>
         <button id="botaoCarrinho" onclick="verCarrinho()">Carrinho</button>
         <button id="TelaPrincipal" onclick="telaPrincipal()">Produtos</button>
         <button id="botaoPerfil" onclick="painelPerfil()">Perfil</button>
         <button id="botaoCompras" onclick="minhasCompras()">Minhas Compras</button>
     </header>
-    
+
     <main>
         <section id="produtos" class="secao-usuario" style="display: none;">
             <h2>Catálogo</h2>
@@ -28,55 +37,62 @@
                 <select id="filtro-categoria" onchange="filtrarPorCategoria()">
                     <option value="">Todas as categorias</option>
                 </select>
+                
             </div>
-            
+
             <div id="lista-produtos">
                 <!-- Lista de produtos -->
             </div>
         </section>
+        <!--carrinho de compras modal-->
         <section id="carrinho" class="secao-usuario" style="display: none;">
             <div class="carrinho-container">
                 <h2>Carrinho de Compras</h2>
                 <table class="tabela-carrinho">
                     <thead>
                         <tr>
-                            <th>Produto</th>
+                            <th>Id do produto</th>
+                            <th>Nome do produto</th>
                             <th>Quantidade</th>
                             <th>Preço</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody id="itens-carrinho">
-                        <!-- Items will be inserted here dynamically -->
+                      <!--Itens DO CARRINHO ;)-->>
                     </tbody>
                 </table>
                 <div class="carrinho-footer">
                     <div id="preco-total">Total: R$ 0.00</div>
                 </div>
             </div>
-            
+
         </section>
-    
-        <!--Administrador Adicionar Produtos -->
+
+        <!--Admin Adicionar Produtos -->
         <section id="painel-admin" style="display: none;">
             <h2>Painel do Administrador</h2>
             <form id="form-produto">
                 <input type="text" id="nome-produto" placeholder="Nome do Produto" required>
                 <input type="number" id="preco-produto" placeholder="Preço" required>
+                <input type="text" id="descricao-produto" placeholder="Descrição do produto" required>
+
                 <select id="categoria-produto" required>
                     <option value="">Selecione uma categoria</option>
                 </select>
                 <input type="file" id="imagem-produto" accept="image/*" required>
                 <button type="button" onclick="adicionarProduto()">Adicionar Produto</button>
             </form>
-            
+
             <div class="gerenciar-categorias">
-                <h3>Gerenciar Categorias</h3>
+                
                 <div class="nova-categoria">
                     <input type="text" id="nome-categoria" placeholder="Nome da Categoria">
                     <button onclick="adicionarCategoria()">Adicionar Categoria</button>
                 </div>
+                <h3>Gerenciar Categorias</h3>
                 <table id="tabela-categorias">
+                    
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -87,7 +103,7 @@
                     <tbody id="lista-categorias"></tbody>
                 </table>
             </div>
-            
+
             <div class="dashboard-usuarios">
                 <h3>Gerenciamento de Usuários</h3>
                 <table id="tabela-usuarios">
@@ -100,7 +116,7 @@
                             <th>Ações</th>
                         </tr>
                     </thead>
-                    
+
                     <tbody id="lista-usuarios">
                     </tbody>
                 </table>
@@ -113,6 +129,7 @@
                             <th>ID</th>
                             <th>Nome</th>
                             <th>Preço</th>
+                            <th>Descrição</th>
                             <th>Categoria</th>
                             <th>Ações</th>
                         </tr>
@@ -122,26 +139,48 @@
             </div>
 
             <div class="admin-panel">
-                <h3>Painel Administrativo - Resumo de Vendas</h3>
+                <h3>Pedidos feitos</h3>
                 <table>
                     <thead>
                         <tr>
                             <th>ID Produto</th>
                             <th>Nome Produto</th>
-                            <th>Total Vendido</th>
-                            <th>Compradores</th>
+                            <th>Quantidade</th>
+                            <th>Valor Total</th>
+                            <th>Data da Compra</th>
+                            <th>Status</th>
+                            <th>Id Comprador</th>
+                            <th>Ações</th>
+                           
                         </tr>
                     </thead>
                     <tbody id="estatisticas-vendas">
                     </tbody>
                 </table>
             </div>
-            
+            <div class="dashboard-devolucoes">
+                <h3>Pedidos de Devolução</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Comprador</th>
+                            <th>Produto</th>
+                            <th>Valor Total</th>
+                            <th>Justificativa</th>
+                            <th>Data da solicitação</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-devolucoes">
+                    </tbody>
+                </table>
+            </div>
             
             <button type="button" onclick="voltar()">Voltar</button>
         </section>
     </main>
-    
+
 
     <!-- Modal de Login -->
     <div id="modal-login" style="display: none;">
@@ -166,11 +205,12 @@
         </form>
     </div>
 
-   <!-- Modal para editar ou excluir produto -->
+  <!-- Modal para editar ou excluir produto -->
 <div id="modal-produto" style="display: none;">
     <div class="modal-conteudo">
         <h2>Editar Produto</h2>
         <form id="form-editar-produto">
+            <input type="hidden" id="produto-id" name="id" value="0">
             <div class="form-group">
                 <label for="editar-nome-produto">Nome do Produto</label>
                 <input type="text" id="editar-nome-produto" placeholder="Nome do Produto" required>
@@ -180,9 +220,14 @@
                 <input type="number" id="editar-preco-produto" placeholder="Preço" required>
             </div>
             <div class="form-group">
-                <label for="editar-imagem-produto">Imagem do Produto</label>
-                <input type="file" id="editar-imagem-produto" accept="image/*">
-                <img id="imagem-preview" src="" alt="Preview da Imagem" style="max-width: 100px; display: none; margin-top: 10px;">
+                <label for="editar-descricao-produto">Descrição</label>
+                <input type="text" id="editar-descricao-produto" placeholder="Descrição" required>
+            </div>
+            <div class="form-group">
+                <label for="editar-categoria-produto">Categoria</label>
+                <select id="editar-categoria-produto" required>
+                    <option value="">Selecione uma categoria</option>
+                </select>
             </div>
             <div class="form-actions">
                 <button type="button" class="btn btn-salvar" onclick="salvarAlteracoes()">Salvar</button>
@@ -192,36 +237,137 @@
     </div>
 </div>
 
-<section id="perfil-usuario" style="display: none;">
-    <div class="perfil-container">
-        <h2>Editar Perfil</h2>
-        <form id="form-perfil">
+
+    <section id="perfil-usuario" style="display: none;">
+        <div class="perfil-container">
+            <h2>Editar Perfil</h2>
+            <form id="form-perfil">
+                <div class="form-group">
+                    <label for="nome-usuario">Nome</label>
+                    <input type="text" id="nome-usuario" name="nome">
+                </div>
+                <div class="form-group">
+                    <label for="email-usuario">Email</label>
+                    <input type="email" id="email-usuario" name="email">
+                </div>
+                <div class="form-group">
+                    <label for="senha-atual">Senha</label>
+                    <input type="password" id="senha-atual" name="senha">
+                </div>
+                <button type="button" onclick="atualizarPerfil()">Salvar Alterações</button>
+                <button type="button" onclick="voltar()">Voltar</button>
+            </form>
+        </div>
+    </section>
+    
+
+    <section id="modal-compras" style="display: none;">
+        <div class="modal-compras-content">
+            <h2>Minhas Compras</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nº da Compra</th>
+                        <th>Nome do Produto</th>
+                        <th>Quantidade</th>
+                        <th>Valor Total</th>
+                        <th>Data da Compra</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-compras">
+                   
+                </tbody>
+            </table>
+            <div class="botoes-compra">
+                <button type="button" onclick="voltar()">Voltar</button>
+            </div>
+        </div>
+
+        <!-- Modal Devolução -->
+        <div id="modal-devolucao" style="display: none;">
+            <div class="modal-devolucao-content">
+                <h2>Solicitar Devolução</h2>
+                <form id="form-devolucao">
+                    <input type="hidden" id="venda-id-devolucao">
+                    <div class="form-group">
+                        <label for="justificativa">Justificativa da Devolução</label>
+                        <textarea id="justificativa-devolucao" required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="enviarSolicitacaoDevolucao()">Enviar</button>
+                        <button type="button" onclick="fecharModalDevolucao()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Avaliação -->
+<div id="modal-avaliacao" style="display: none;">
+    <div class="modal-avaliacao-completo">
+        <h2>Avaliar Produto</h2>
+        <form id="form-avaliacao">
+            <input type="hidden" id="venda-id-avaliacao">
+            <input type="hidden" id="produto-id-avaliacao">
             <div class="form-group">
-                <label for="nome-usuario">Nome</label>
-                <input type="text" id="nome-usuario" name="nome">
+                <label for="rating">Avaliação</label>
+                <select id="rating" required>
+                    <option value="5">5 estrelas - Excelente</option>
+                    <option value="4">4 estrelas - Muito Bom</option>
+                    <option value="3">3 estrelas - Bom</option>
+                    <option value="2">2 estrelas - Regular</option>
+                    <option value="1">1 estrela - Ruim</option>
+                </select>
             </div>
             <div class="form-group">
-                <label for="email-usuario">Email</label>
-                <input type="email" id="email-usuario" name="email">
+                <label for="comentario">Comentário</label>
+                <textarea id="comentario-avaliacao" placeholder="Deixe seu comentário sobre o produto" required></textarea>
             </div>
-            <div class="form-group">
-                <label for="senha-atual">Senha Atual</label>
-                <input type="password" id="senha-atual" name="senhaAtual">
+            <div class="form-actions">
+                <button type="button" onclick="enviarAvaliacao()">Enviar Avaliação</button>
+                <button type="button" onclick="fecharModalAvaliacao()">Cancelar</button>
             </div>
-            <div class="form-group">
-                <label for="nova-senha">Nova Senha</label>
-                <input type="password" id="nova-senha" name="novaSenha">
-            </div>
-            <button type="button" onclick="atualizarPerfil()">Salvar Alterações</button>
-            <button type="button" onclick="voltar()">Voltar</button>
         </form>
     </div>
-</section>
+</div>
 
-<section id="modal-compras" style="display: none;">
+<!-- Modal Ver Avaliações -->
+<div id="modal-ver-avaliacoes" style="display: none;">
+    <div class="modal-avaliacoes-content">
+        <h2>Avaliações do Produto</h2>
+        <div id="modal-lista-avaliacoes">
+            <!-- Avaliações serão inseridas aqui -->
+        </div>
+        <button type="button" onclick="voltar()">Voltar</button>
+    </div>
+</div>
+<div id="modal-editar-avaliacao" style="display: none;">
+    <div class="modal-content">
+        <h2>Editar Avaliação</h2>
+        <form id="form-editar-avaliacao" onsubmit="atualizarAvaliacao(); return false;">
+            <input type="hidden" id="editar-avaliacao-id">
+            <div class="rating-container">
+                <select id="editar-rating" required>
+                    <option value="5">5 estrelas</option>
+                    <option value="4">4 estrelas</option>
+                    <option value="3">3 estrelas</option>
+                    <option value="2">2 estrelas</option>
+                    <option value="1">1 estrela</option>
+                </select>
+            </div>
+            <textarea id="editar-comentario-avaliacao" required></textarea>
+            <div class="modal-buttons">
+                <button type="submit">Salvar</button>
+                <button type="button" onclick="fecharModalEditarAvaliacao()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-</section>
 
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="/frontend/JavaScript/geral.js"></script>
     <script src="/frontend/JavaScript/carrinho.js"></script>
@@ -231,6 +377,9 @@
     <script src="/frontend/JavaScript/usuarios.js"></script>
     <script src="/frontend/JavaScript/categoria.js"></script>
     <script src="/frontend/JavaScript/vendas.js"></script>
+    <script src="/frontend/JavaScript/avaliacao.js"></script>
+    <script src="/frontend/JavaScript/devolucao.js"></script>
 
 </body>
+
 </html>

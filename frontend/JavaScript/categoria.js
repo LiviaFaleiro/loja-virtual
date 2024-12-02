@@ -1,32 +1,35 @@
-const categorias = [];
-
 function adicionarCategoria() {
     const nome = $("#nome-categoria").val();
-    if (nome) {
-        const novaCategoria = {
-            id: categorias.length + 1,
-            nome: nome
-        };
-        categorias.push(novaCategoria);
+    let dados = {
+        nome: nome
+    };
+    
+    $.post("http://localhost:8080/categoria/cadastrar", dados, function(categoria) {
         renderizarCategorias();
-        $("#nome-categoria").val('');
-    }
+        $("#nome-categoria").val(''); 
+    });
 }
 
 function renderizarCategorias() {
     $("#lista-categorias").html("");
-    categorias.forEach(categoria => {
-        $("#lista-categorias").append(`
-            <tr>
-                <td>${categoria.id}</td>
-                <td>${categoria.nome}</td>
-                <td>
-                    <button onclick="excluirCategoria(${categoria.id})" class="btn-excluir">Excluir</button>
-                </td>
-            </tr>
-        `);
+    
+    $.get("http://localhost:8080/categorias", function(categorias) {
+        categorias.forEach(categoria => {
+            $("#lista-categorias").append(`
+                <tr>
+                    <td>${categoria.id}</td>
+                    <td>${categoria.nome}</td>
+                    <td>
+                        <button onclick="excluirCategoria(${categoria.id})" class="btn-excluir">Excluir</button>
+                        <button onclick="editarCategoria(${categoria.id})" class="btn-editar">Editar</button>
+                    </td>
+                </tr>
+            `);
+        });
     });
 }
+
+
 
 function excluirCategoria(categoriaId) {
     if (confirm("Tem certeza que deseja excluir esta categoria?")) {
@@ -40,25 +43,79 @@ function excluirCategoria(categoriaId) {
 
 function atualizarSelectCategorias() {
     const select = $("#categoria-produto");
-    select.html('<option value="">Selecione uma categoria</option>');
-    categorias.forEach(categoria => {
-        select.append(`<option value="${categoria.id}">${categoria.nome}</option>`);
+    select.empty();
+    select.append('<option value="">Selecione uma categoria</option>');
+    
+    $.get("http://localhost:8080/categorias", function(categorias) {
+        categorias.forEach(categoria => {
+            select.append(`<option value="${categoria.id}">${categoria.nome}</option>`);
+        });
     });
 }
+
 
 function carregarCategoriasParaFiltro() {
     const select = $("#filtro-categoria");
     select.html('<option value="">Todas as categorias</option>');
-    categorias.forEach(categoria => {
-        select.append(`<option value="${categoria.id}">${categoria.nome}</option>`);
+    
+    $.get("http://localhost:8080/categorias", function(categorias) {
+        categorias.forEach(categoria => {
+            select.append(`<option value="${categoria.id}">${categoria.nome}</option>`);
+        });
     });
 }
 
 function filtrarPorCategoria() {
-    const categoriaId = parseInt($("#filtro-categoria").val());
-    const produtosFiltrados = categoriaId 
-        ? produtos.filter(p => p.categoriaId === categoriaId) 
-        : produtos;
+    const categoriaId = $("#filtro-categoria").val();
     
-    renderizarProdutos(produtosFiltrados);
+    if (!categoriaId) {
+        // Show all products if no category selected
+        $.get("http://localhost:8080/produtos", function(produtos) {
+            $("#lista-produtos").empty();
+            produtos.forEach(produto => {
+                renderizarProduto(produto);
+            });
+        });
+        return;
+    }
+
+    // Get products filtered by category
+    $.get(`http://localhost:8080/produtos/categoria/${categoriaId}`, function(produtos) {
+        $("#lista-produtos").empty();
+        produtos.forEach(produto => {
+            renderizarProduto(produto);
+        });
+    });
+}
+
+$(document).ready(function() {
+    carregarCategoriasParaFiltro();
+});
+
+function editarCategoria(categoriaId) {
+    const novoNome = prompt("Digite o novo nome da categoria:");
+    if (novoNome) {
+        const dados = {
+            id: categoriaId,
+            nome: novoNome
+        };
+        
+        $.post("http://localhost:8080/categoria/atualizar", dados, function(response) {
+            renderizarCategorias();
+            atualizarSelectCategorias();
+        });
+    }
+}
+
+function excluirCategoria(categoriaId) {
+    if (confirm("Tem certeza que deseja excluir esta categoria?")) {
+        const dados = {
+            id: categoriaId
+        };
+        
+        $.post("http://localhost:8080/categoria/deletar", dados, function(response) {
+            renderizarCategorias();
+            atualizarSelectCategorias();
+        });
+    }
 }

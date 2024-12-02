@@ -1,90 +1,160 @@
 function adicionarAoCarrinho(produtoId) {
-    const produto = produtos.find(p => p.id === produtoId);
-    const itemExistente = carrinho.find(item => item.id === produtoId);
-
-    if (itemExistente) {
-        itemExistente.quantidade++;
-    } else {
-        carrinho.push({ ...produto, quantidade: 1 });
+    if (!usuarioAtual) {
+        alert("Por favor, faça login para adicionar produtos ao carrinho");
+        return;
     }
 
-    renderizarCarrinho();
+    fetch("http://localhost:8080/carrinho/adicionar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `usuario_id=${usuarioAtual.id}&produto_id=${produtoId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("Produto adicionado ao carrinho!");
+        renderizarCarrinho();
+    })
+    .catch(error => {
+        console.error("Erro ao adicionar ao carrinho:", error);
+        alert("Erro ao adicionar produto ao carrinho");
+    });
 }
 
-function removerDoCarrinho(produtoId) {
-    const item = carrinho.find(item => item.id === produtoId);
-    if (item.quantidade > 1) {
-        item.quantidade--;
-    } else {
-        carrinho = carrinho.filter(item => item.id !== produtoId);
-    }
-    renderizarCarrinho();
-}
 
-let vendas = [];
+function removerDoCarrinho(itemId) {
+    $.post('http://localhost:8080/carrinho/deletar', { id: itemId }, function() {
+        renderizarCarrinho();
+    })
+    .fail(function(error) {
+        console.error("Erro ao remover item do carrinho:", error);
+        alert("Erro ao remover item do carrinho");
+    });
+}
 
 function finalizarCompra() {
-    if (carrinho.length === 0) {
+    if (!usuarioAtual) {
+        alert("Por favor, faça login para finalizar a compra");
+        return;
+    }
+
+    let valorTotal = 0;
+    const itensCarrinho = $("#itens-carrinho tr").toArray();
+    
+    if (itensCarrinho.length === 0) {
         alert("Seu carrinho está vazio!");
         return;
     }
 
-    const precoTotal = carrinho.reduce((total, item) => total + (item.preco * item.quantidade), 0);
-    const nomeCliente = prompt("Digite seu nome para finalizar a compra:");
+    // pega nome e quantidade do primeiro item
+    const nomeProduto = $(itensCarrinho[0]).find('td').eq(1).text();
+    const quantidade = parseInt($(itensCarrinho[0]).find('td').eq(2).text());
     
-    if (nomeCliente && confirm(`Confirmar compra no valor total de R$ ${precoTotal.toFixed(2)}?`)) {
-        const novaVenda = {
-            id: vendas.length + 1,
-            data: new Date().toLocaleString(),
-            nomeCliente: nomeCliente,
-            itens: carrinho,
-            total: precoTotal
-        };
+    // valor total calculo
+    itensCarrinho.forEach(item => {
+        if ($(item).find('td').length > 0) {
+            const valorTexto = $(item).find('td').eq(3).text().replace('R$ ', '').trim();
+            const valor = parseFloat(valorTexto);
+            if (!isNaN(valor)) {
+                valorTotal += valor;
+            }
+        }
+    });
 
-        vendas.push(novaVenda);
-        mostrarEstatisticasVendas();
-        carrinho = [];
+    const venda = {
+        usuario_id: usuarioAtual.id,
+        data_venda: new Date().toISOString(),
+        valor_total: valorTotal,
+        status: "Pedido feito",
+        nome_produto: nomeProduto,
+        quantidade: quantidade
+    };
+
+    fetch("http://localhost:8080/venda/finalizar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(venda)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("Compra finalizada com sucesso!");
         renderizarCarrinho();
-        alert("Compra realizada com sucesso!");
-    }
+    })
+    .catch(error => {
+        console.error("Erro ao finalizar compra:", error);
+        alert("Erro ao finalizar compra");
+    });
 }
 
 function renderizarCarrinho() {
+    if (!usuarioAtual) {
+        console.log("Nenhum usuário logado");
+        return;
+    }
+    
+    console.log("Renderizando carrinho para usuário:", usuarioAtual.id);
     $("#itens-carrinho").html("");
     let precoTotal = 0;
 
-    carrinho.forEach(item => {
-        precoTotal += item.preco * item.quantidade;
-        $("#itens-carrinho").append(`
-            <tr>
-                <td>${item.nome}</td>
-                <td>${item.quantidade}</td>
-                <td>R$ ${(item.preco * item.quantidade).toFixed(2)}</td>
-                <td>
-                    <button onclick="removerDoCarrinho(${item.id})">Remover</button>
-                </td>
-            </tr>
-        `);
-    });
+    fetch(`http://localhost:8080/carrinho/usuario/${usuarioAtual.id}`)
+        .then(response => response.json())
+        .then(itensCarrinho => {
+            console.log("Itens do carrinho recebidos:", itensCarrinho);
+            if (itensCarrinho.length === 0) {
+                $("#itens-carrinho").html("<tr><td colspan='5'>Carrinho vazio</td></tr>");
+                return;
+            }
 
-    $("#preco-total").text(`Total: R$ ${precoTotal.toFixed(2)}`);
-    
-    // Add purchase button if cart is not empty
-    if (carrinho.length > 0) {
-        $("#itens-carrinho").append(`
-            <tr>
-                <td colspan="4">
-                    <button onclick="finalizarCompra()" class="btn-finalizar">Finalizar Compra</button>
-                </td>
-            </tr>
-        `);
-    }
+            itensCarrinho.forEach(item => {
+                fetch(`http://localhost:8080/produto/${item.produto_id}`)
+                    .then(response => response.json())
+                    .then(produto => {
+                        console.log("Produto recebido:", produto);
+                        precoTotal += produto.valor * item.quantidade;
+                        
+                        $("#itens-carrinho").append(`
+                            <tr>
+                                <td>${produto.id}</td>
+                                <td>${produto.nome}</td>
+                                <td>${item.quantidade}</td>
+                                <td>R$ ${(produto.valor * item.quantidade).toFixed(2)}</td>
+                                <td>
+                                    <button onclick="removerDoCarrinho(${item.id})">Remover</button>
+                                </td>
+                            </tr>
+                        `);
+
+                        $("#preco-total").text(`Total: R$ ${precoTotal.toFixed(2)}`);
+                    });
+            });
+            $("#itens-carrinho").append(`
+                <tr>
+                    <td colspan="5" style="text-align: right">
+                        <button onclick="finalizarCompra()">Finalizar Compra</button>
+                    </td>
+                </tr>
+            `);
+            
+        })
+        .catch(error => {
+            console.error("Erro ao carregar carrinho:", error);
+            $("#itens-carrinho").html("<tr><td colspan='5'>Erro ao carregar carrinho</td></tr>");
+        });
 }
-
-
 $(document).ready(() => {
     $("#botaoPerfil").hide();
     $("#botaoAdm").hide();
-    $("#botaoCarrinho").show(); // Show cart button
+    $("#botaoCarrinho").show();
     renderizarProdutos();
+    
+    if (usuarioAtual) {
+        renderizarCarrinho();
+    }
 });
+
+
+
+

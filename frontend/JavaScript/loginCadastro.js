@@ -2,59 +2,94 @@
 function fazerLogin() {
     const usuario = $("#usuario").val();
     const senha = $("#senha").val();
-    $("#produtos").show(); 
-    $(".cabecalho").show(); 
 
-    const usuarioEncontrado = usuarios.find(u => u.usuario === usuario && u.senha === senha); 
+    fetch(`http://localhost:8080/usuarios`)
+    .then(response => response.json())
+    .then(usuariosBanco => {
+        const usuarioEncontrado = usuariosBanco.find(u => u.nome === usuario && u.senha === senha);
 
-    if (usuarioEncontrado) {
-        usuarioAtual = usuarioEncontrado;
-        alert(`Bem-vindo, ${usuarioAtual.usuario}`);
-        $("#modal-login").hide();
+        if (usuarioEncontrado) {
+            usuarioAtual = {
+                id: usuarioEncontrado.id,
+                usuario: usuarioEncontrado.nome,
+                email: usuarioEncontrado.email,
+                senha: usuarioEncontrado.senha,
+                tipo: usuarioEncontrado.tipo || "usuario"
+            };
+            console.log("Usuario logado:", usuarioAtual); 
 
-        if (usuarioAtual.tipo === "admin") {
-            $("#botaoCarrinho").hide();
-            $("#botaoAdm").show();
-            $("#botaoPerfil").hide(); 
+            alert(`Bem-vindo, ${usuarioAtual.usuario}`);
+            $("#modal-login").hide();
+            $("#produtos").show();
+            $(".cabecalho").show();
+
+            if (usuarioAtual.tipo === "admin") {
+                $("#botaoCarrinho").hide();
+                $("#botaoAdm").show();
+                $("#botaoPerfil").hide();
+                $("#botaoCompras").hide();
+                $("#botaoMediaVendas").show();
+            } else {
+                $("#botaoAdm").hide();
+                $("#botaoCarrinho").show();
+                $("#botaoPerfil").show();
+                $("#botaoCompras").show();
+                $("#botaoMediaVendas").hide();
+
+                renderizarCarrinho(); 
+            }
+
+            carregarCategoriasParaFiltro();
+            renderizarProdutos();
         } else {
-            $("#botaoAdm").hide();
-            $("#botaoCarrinho").show();
-            $("#botaoPerfil").show(); 
+            alert("Usuário ou senha inválidos. Por favor, tente novamente.");
+            $("#modal-login").show();
+            $("#produtos").hide();
+            $(".cabecalho").hide();
         }
-
-        carregarCategoriasParaFiltro();
-        renderizarProdutos();
-    } else {
-        alert("Usuário ou senha inválidos. Por favor, tente novamente.");
-        $("#modal-login").show();
-        $("#produtos").hide(); 
-        $(".cabecalho").hide(); 
-    }
+    });
 }
 
 
 //cadastro
 function fazerRegistro() {
-    $("#modal-login").show(); 
-
     const usuario = $("#usuario-registro").val();
     const senha = $("#senha-registro").val();
-    const novoId = usuarios.length + 1; // Generate new ID
-
+    const email = $("#email-registro").val();
+    
     if (usuarios.find(u => u.usuario === usuario)) {
         alert("Usuário já existe.");
         return;
     }
 
-    usuarios.push({ 
-        id: novoId,
-        usuario, 
-        senha, 
-        tipo: "usuario" 
+    const formData = new FormData();
+    formData.append("nome", usuario);
+    formData.append("email", email);
+    formData.append("senha", senha);
+    formData.append("tipo", "usuario");
+
+    fetch("http://localhost:8080/usuario/cadastrar", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        usuarios.push({ 
+            id: data.id,
+            usuario: usuario,
+            email: email,
+            senha: senha,
+            tipo: "usuario"
+        });
+        
+        alert("Usuário registrado com sucesso. Faça login!");
+        $("#modal-registro").hide();
+        $("#modal-login").show();
+        $("#usuario-registro, #email-registro, #senha-registro").val("");
+    })
+    .catch(error => {
+        alert("Erro ao cadastrar usuário");
     });
-    
-    alert("Usuário registrado com sucesso. Faça login!");
-    $("#modal-registro").hide();
 }
 
 

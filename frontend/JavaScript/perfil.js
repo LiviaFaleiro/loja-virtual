@@ -10,18 +10,29 @@ function editarPerfil() {
 function atualizarPerfil() {
     const novoNome = document.getElementById('nome-usuario').value;
     const novoEmail = document.getElementById('email-usuario').value;
-    const senhaAtual = document.getElementById('senha-atual').value;
-    const novaSenha = document.getElementById('nova-senha').value;
+    const novaSenha = document.getElementById('senha-atual').value;
 
-    if (senhaAtual === usuarioAtual.senha) {
+    const formData = new FormData();
+    formData.append("id", usuarioAtual.id);
+    formData.append("nome", novoNome);
+    formData.append("email", novoEmail);
+    formData.append("senha", novaSenha);
+
+    fetch("http://localhost:8080/usuario/atualizar", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Update local user object
         usuarioAtual.usuario = novoNome;
         usuarioAtual.email = novoEmail;
-        if (novaSenha) {
-            usuarioAtual.senha = novaSenha;
-        }
+        usuarioAtual.senha = novaSenha;
+        
         alert('Perfil atualizado com sucesso!');
         voltar();
-    } else {
-        alert('Senha atual incorreta!');
-    }
+    })
+    .catch(error => {
+        alert("Erro ao atualizar perfil");
+    });
 }

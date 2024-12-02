@@ -1,6 +1,5 @@
-
 const usuarios = [
-    { usuario: "admin", senha: "123", tipo: "admin" },
+   
 ];
 
 const produtos = [];
@@ -13,6 +12,9 @@ function trocarUsuario(){
     $("#produtos").hide();
     $(".cabecalho").hide(); 
     $("#painel-admin").hide(); 
+    $("#carrinho").hide();
+    $("#modal-compras").hide();
+    $("#perfil-usuario").hide();
 }
 
 function verCarrinho(){ 
@@ -27,7 +29,7 @@ function telaPrincipal(){
     document.getElementById('produtos').style.display = 'block'
     $("#painel-admin").hide();
     $("#perfil-usuario").hide();
-    carregarCategoriasParaFiltro(); // Add this line
+    carregarCategoriasParaFiltro();
 }
 
 function painelPerfil(){
@@ -43,20 +45,24 @@ function painelAdm() {
     renderizarCategorias();
     renderizarProdutosAdmin();
     atualizarSelectCategorias();
+    mostrarEstatisticasVendas();
+    carregarDevolucoes();
 }
-
-
 
 function voltar(){
     document.getElementById('perfil-usuario').style.display = 'none';
     document.getElementById('produtos').style.display = 'block';
     $("#painel-admin").hide();
     $("#carrinho").hide();
+    $("#modal-compras").hide();
+    $("#modal-ver-avaliacoes").hide();
 }
 
 function login() {
     $("#modal-login").show();
     $("#modal-registro").hide();
+    $("#carrinho").hide();
+    $("#modal-compras").hide();
 
 
 }
@@ -64,4 +70,21 @@ function cadastro() {
     $("#modal-login").hide();
     $("#modal-registro").show();
 }
+function minhasCompras(){
+    $("#produtos").hide();
+    $("#perfil-usuario").hide();
+    $("#carrinho").hide();
+    $("#modal-compras").show();
+    carregarComprasUsuario();
 
+}
+
+function solicitarDevolucao(vendaId) {
+    $("#venda-id-devolucao").val(vendaId);
+    $("#modal-devolucao").show();
+}
+
+function fecharModalDevolucao() {
+    $("#modal-devolucao").hide();
+    $("#justificativa-devolucao").val('');
+}

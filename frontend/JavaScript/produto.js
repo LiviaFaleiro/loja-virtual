@@ -1,147 +1,191 @@
-// Renderiza os produtos
-function renderizarProdutos(produtosParaMostrar = produtos) {
-    $("#lista-produtos").html("");
+function renderizarProdutos() {
+    const $listaProdutos = $("#lista-produtos");
+    $listaProdutos.empty();
+    
+    fetch("http://localhost:8080/produtos")
+        .then(response => response.json())
+        .then(produtos => {
+            produtos.forEach(produto => {
+                const $produtoCard = $("<div>", {
+                    class: "produto-card"
+                }).append(
+                    $("<h3>").text(produto.nome || 'Sem nome'),
+                    $("<p>").text(`R$ ${parseFloat(produto.valor).toFixed(2)}`),
+                    $("<p>").text(produto.descricao || 'Sem descrição'),
+                    $("<p>").text(`Categoria: ${produto.categorias ? produto.categorias.map(c => c.nome).join(', ') : 'Sem categoria'}`),
+                    $("<button>", {
+                        class: "btn-avaliacoes",
+                        text: "Ver Avaliações",
+                        click: () => mostrarAvaliacoesProduto(produto.id)
+                    }),
+                    $("<button>", {
+                        class: "btn-carrinho",
+                        text: "Adicionar ao Carrinho",
+                        click: () => adicionarAoCarrinho(produto.id)
+                    })
+                );
 
-    produtosParaMostrar.forEach(produto => {
-        let produtoHTML = `
-            <div class="produto-card">
-                <img src="${produto.imagem}" alt="${produto.nome}" />
-                <h3>${produto.nome}</h3>
-                <p>R$ ${produto.preco.toFixed(2)}</p>
-        `;
-
-        if (usuarioAtual && usuarioAtual.tipo === 'admin') {
-            produtoHTML += `
-                <button onclick="editarProduto(${produto.id})">Editar Produto</button>
-                <button onclick="excluirProduto(${produto.id})">Excluir Produto</button>
-            `;
-        } else if (usuarioAtual && usuarioAtual.tipo === 'usuario') {
-            produtoHTML += `<button onclick="adicionarAoCarrinho(${produto.id})">Adicionar ao Carrinho</button>`;
-        }
-
-        produtoHTML += `</div>`;
-        $("#lista-produtos").append(produtoHTML);
-    });
+                $listaProdutos.append($produtoCard);
+            });
+        });
 }
+
+
 
 // Adiciona um produto (somente admin)
 function adicionarProduto() {
-    if (!usuarioAtual || usuarioAtual.tipo !== "admin") {
-        alert("Você não tem permissão para adicionar produtos.");
-        return;
-    }
+    const formData = new FormData();
+    formData.append("nome", $("#nome-produto").val());
+    formData.append("valor", $("#preco-produto").val());
+    formData.append("descricao", $("#descricao-produto").val());
+    formData.append("categoria_id", $("#categoria-produto").val());
 
-    const nome = $("#nome-produto").val();
-    const preco = parseFloat($("#preco-produto").val());
-    const categoriaId = parseInt($("#categoria-produto").val());
-    const imagemInput = document.getElementById("imagem-produto");
+    console.log("Categoria ID being sent:", $("#categoria-produto").val()); // Add this line to debug
 
-    if (!nome || !preco || isNaN(preco) || !categoriaId || !imagemInput.files[0]) {
-        alert("Preencha todos os campos corretamente.");
-        return;
-    }
-
-    const leitor = new FileReader();
-    leitor.onload = function (e) {
-        const produto = {
-            id: produtos.length + 1,
-            nome,
-            preco,
-            categoriaId,
-            imagem: e.target.result,
-        };
-
-        produtos.push(produto);
+    fetch("http://localhost:8080/produto/cadastrar", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(produto => {
         renderizarProdutos();
-        alert("Produto adicionado com sucesso.");
-    };
-
-    leitor.readAsDataURL(imagemInput.files[0]);
+        renderizarProdutosAdmin();
+        $("#nome-produto, #preco-produto, #categoria-produto, #descricao-produto").val("");
+    });
 }
 
-// Abre o modal para editar o produto
-let produtoEmEdicao = null;
 
-function editarProduto(produtoId) {
-    const produto = produtos.find(p => p.id === produtoId);
-    if (!produto) {
-        alert("Produto não encontrado.");
-        return;
-    }
+function editarProduto(id) {
+    // First load all categories
+    fetch("http://localhost:8080/categorias")
+        .then(response => response.json())
+        .then(categorias => {
+            const selectCategoria = $("#editar-categoria-produto");
+            selectCategoria.empty();
+            selectCategoria.append('<option value="">Selecione uma categoria</option>');
+            
+            categorias.forEach(categoria => {
+                selectCategoria.append(`<option value="${categoria.id}">${categoria.nome}</option>`);
+            });
 
-    produtoEmEdicao = produto;
-
-    $("#editar-nome-produto").val(produto.nome);
-    $("#editar-preco-produto").val(produto.preco);
-    $("#imagem-preview").attr("src", produto.imagem).show();
-    $("#modal-produto").show();
+            // Then load product data
+            $.get(`http://localhost:8080/produto/${id}`, function(produto) {
+                $('#editar-nome-produto').val(produto.nome);
+                $('#editar-preco-produto').val(produto.valor);
+                $('#editar-descricao-produto').val(produto.descricao);
+                $('#editar-categoria-produto').val(produto.categoriaId);
+                $('#form-editar-produto').data('produto-id', produto.id);
+                $('#modal-produto').show();
+            });
+        });
 }
+
+
 
 function fecharModalProduto() {
     $("#modal-produto").hide();
     produtoEmEdicao = null; 
 }
-
-
 function salvarAlteracoes() {
-    if (!produtoEmEdicao) return;
+    let id = $('#form-editar-produto').data('produto-id');
+    let nome = $('#editar-nome-produto').val();
+    let valor = $('#editar-preco-produto').val();
+    let descricao = $('#editar-descricao-produto').val();
+    let categoriaId = $('#editar-categoria-produto').val();
 
-    const novoNome = $("#editar-nome-produto").val();
-    const novoPreco = parseFloat($("#editar-preco-produto").val());
-    const imagemInput = document.getElementById("editar-imagem-produto");
+    let formData = new FormData();
+    formData.append('id', id);
+    formData.append('nome', nome);
+    formData.append('valor', valor);
+    formData.append('descricao', descricao);
+    formData.append('categoria_id', categoriaId);
 
-    if (!novoNome || isNaN(novoPreco)) {
-        alert("Preencha todos os campos corretamente.");
-        return;
-    }
-
-    produtoEmEdicao.nome = novoNome;
-    produtoEmEdicao.preco = novoPreco;
-
-    if (imagemInput.files[0]) {
-        const leitor = new FileReader();
-        leitor.onload = function (e) {
-            produtoEmEdicao.imagem = e.target.result;
-            renderizarProdutos();
-            renderizarProdutosAdmin();
-            fecharModalProduto();
-        };
-        leitor.readAsDataURL(imagemInput.files[0]);
-    } else {
+    fetch(`http://localhost:8080/produto/atualizar`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(() => {
+        fecharModalProduto();
         renderizarProdutos();
         renderizarProdutosAdmin();
-        fecharModalProduto();
-    }
+    });
 }
 
-function excluirProduto(produtoId) {
-    if (confirm("Tem certeza que deseja excluir este produto?")) {
-        const index = produtos.findIndex(p => p.id === produtoId);
-        if (index !== -1) {
-            produtos.splice(index, 1);
+function excluirProduto(id) {
+    if (confirm('Tem certeza que deseja excluir este produto?')) {
+        const formData = new FormData();
+        formData.append('id', id);
+
+        fetch(`http://localhost:8080/produto/deletar`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Falha ao excluir produto');
+            }
+            return response.json();
+        })
+        .then(() => {
             renderizarProdutos();
             renderizarProdutosAdmin();
             alert("Produto excluído com sucesso!");
-        }
+        })
+        .catch(error => {
+            alert("Erro ao excluir produto: " + error.message);
+            console.error('Error:', error);
+        });
     }
 }
+
+function adicionarProduto() {
+    const formData = new FormData();
+    formData.append("nome", $("#nome-produto").val());
+    formData.append("valor", $("#preco-produto").val());
+    formData.append("descricao", $("#descricao-produto").val());
+    formData.append("categoria_id", $("#categoria-produto").val());
+
+    fetch("http://localhost:8080/produto/cadastrar", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        return response.json();
+    })
+    .then(data => {
+        console.log('Saved product:', data);
+        renderizarProdutos();
+        renderizarProdutosAdmin();
+        $("#nome-produto, #preco-produto, #categoria-produto, #descricao-produto").val("");
+    })
+    .catch(error => {
+        console.error('Error saving product:', error);
+    });
+}
+
 
 function renderizarProdutosAdmin() {
     $("#lista-produtos-admin").html("");
     
-    produtos.forEach(produto => {
-        const categoria = categorias.find(c => c.id === produto.categoriaId);
-        $("#lista-produtos-admin").append(`
-            <tr>
-                <td>${produto.id}</td>
-                <td>${produto.nome}</td>
-                <td>R$ ${produto.preco.toFixed(2)}</td>
-                <td>${categoria ? categoria.nome : 'Sem categoria'}</td>
-                <td>
-                    <button onclick="editarProduto(${produto.id})">Editar</button>
-                    <button onclick="excluirProduto(${produto.id})" class="btn-excluir">Excluir</button>
-                </td>
-            </tr>
-        `);
+    fetch("http://localhost:8080/produtos")
+    .then(response => response.json())
+    .then(produtos => {
+        produtos.forEach(produto => {
+            $("#lista-produtos-admin").append(`
+                <tr>
+                    <td>${produto.id}</td>
+                    <td>${produto.nome}</td>
+                    <td>R$ ${produto.valor.toFixed(2)}</td>
+                    <td>${produto.descricao || 'Sem descrição'}</td>
+                    <td>${produto.categoriaId}</td>
+                    <td>
+                        <button onclick="editarProduto(${produto.id})" class="btn-editar">Editar</button>
+                        <button onclick="excluirProduto(${produto.id})" class="btn-excluir">Excluir</button>
+                    </td>
+                </tr>
+            `);
+        });
     });
 }

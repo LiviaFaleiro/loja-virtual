@@ -4,7 +4,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #ffffff;
-    color: #333;
+    color: #3d3939;
     overflow-x: hidden;
 }
 
@@ -53,13 +53,26 @@ main {
     justify-content: center;
 }
 
+#lista-produtos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5rem;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 .produto-card {
     border: none;
     border-radius: 10px;
     padding: 1.5rem;
-    width: 220px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: o;
     text-align: center;
-    background: linear-gradient(145deg, #FEEC37, #FFA24C);
+    background: linear-gradient(145deg, #ff00aa, #ffe798);
     color: white;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -153,7 +166,7 @@ button:hover {
 #painel-admin input, #painel-admin button {
     padding: 0.5rem;
     font-size: 14px;
-    border: 1px solid #ddd;
+    border: 1px solid #ffffff;
     border-radius: 5px;
 }
 
@@ -365,40 +378,7 @@ button:hover {
         border-radius: 4px;
     }
     
-    .dashboard-usuarios {
-        margin-top: 20px;
-        padding: 20px;
-    }
-    
-    #tabela-usuarios {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
-    }
-    
-    #tabela-usuarios th, #tabela-usuarios td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-    
-    #tabela-usuarios th {
-        background-color: #f4f4f4;
-    }
-    
-    #tabela-usuarios button {
-        padding: 5px 10px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-    }
-    
-    #tabela-usuarios button:hover {
-        background-color: #45a049;
-    }
-    
+
     .btn-excluir {
         background-color: #ff4444 !important;
         margin-left: 5px;
@@ -413,14 +393,7 @@ button:hover {
         padding: 20px;
     }
     
-    .nova-categoria {
-        margin-bottom: 15px;
-    }
-    
-    #tabela-categorias {
-        width: 100%;
-        border-collapse: collapse;
-    }
+
     
     #categoria-produto {
         width: 100%;
@@ -437,28 +410,6 @@ button:hover {
         padding: 8px;
         width: 200px;
         border-radius: 4px;
-    }
-    
-    .dashboard-produtos {
-        margin-top: 20px;
-        padding: 20px;
-    }
-    
-    #tabela-produtos-admin {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
-    }
-    
-    #tabela-produtos-admin th, 
-    #tabela-produtos-admin td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-    
-    #tabela-produtos-admin th {
-        background-color: #f4f4f4;
     }
     
     .carrinho-container {
@@ -496,53 +447,746 @@ button:hover {
         border-radius: 4px;
         cursor: pointer;
     }
-    
-    .admin-panel {
-        width: 90%;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+    #modal-compras {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
     }
     
+    .modal-compras-content {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        max-width: 900px;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    
+    .modal-compras-content h2 {
+        color: #333;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        font-size: 1.8rem;
+    }
+    
+    .modal-compras-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1.5rem;
+    }
+    
+    .modal-compras-content th,
+    .modal-compras-content td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .modal-compras-content th {
+        background-color: #f5f5f5;
+        font-weight: 600;
+        color: #444;
+    }
+    
+    .modal-compras-content tr:hover {
+        background-color: #f9f9f9;
+    }
+    
+    .modal-compras-content button {
+        display: block;
+        margin: 1rem auto;
+        padding: 10px 20px;
+        background-color: #eaff00;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+    }
+    
+    .modal-compras-content button:hover {
+        background-color: #f10085;
+    }
+    
+    .avaliacao-item {
+        background: white;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(255, 162, 76, 0.15);
+        border-left: 4px solid #FF77B7;
+    }
+    
+    .avaliacao-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        color: #FF77B7;
+    }
+    
+    .usuario {
+        font-weight: bold;
+        color: #FFA24C;
+    }
+    
+    .nota {
+        color: gold;
+        font-size: 20px;
+    }
+    
+    
+    .data {
+        color: #888;
+        font-size: 0.9em;
+    }
+    
+    .comentario {
+        color: #666;
+        line-height: 1.5;
+        margin-top: 10px;
+    }
+    
+    #modal-ver-avaliacoes button {
+        background: linear-gradient(90deg, #FF77B7, #FFA24C);
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+        transition: transform 0.2s;
+    }
+    
+    #modal-ver-avaliacoes button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 119, 183, 0.3);
+    }
+    
+    .modal-avaliacoes-content {
+        background: linear-gradient(145deg, #FFF0F5, #FFE4E1);
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(255, 119, 183, 0.2);
+        width: 80%;
+        max-width: 800px;
+        margin: 20px auto;
+    }
+    #modal-avaliacao {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    
+    .modal-avaliacao-completo {
+        background: linear-gradient(145deg, #FF77B7, #FFA24C);
+        padding: 2rem;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 500px;
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 119, 183, 0.3);
+    }
+    
+    .modal-avaliacao-completo h2 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .modal-avaliacao-completo .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .modal-avaliacao-completo label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    
+    .modal-avaliacao-completo select,
+    .modal-avaliacao-completo textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+    
+    .modal-avaliacao-completo .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+    
+    .modal-avaliacao-completo button {
+        background: white;
+        color: #FF77B7;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .modal-avaliacao-completo button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+    }
+    
+    #modal-editar-avaliacao {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+    
+    .modal-content {
+        background: linear-gradient(145deg, #FF77B7, #FFA24C);
+        padding: 2rem;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 500px;
+        color: white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 4px 15px rgba(255, 119, 183, 0.3);
+    }
+    
+    #editar-comentario-avaliacao {
+        width: 100%;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+    
+    .modal-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+    
+    .modal-buttons button {
+        background: white;
+        color: #FF77B7;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: transform 0.2s;
+    }
+    
+    .modal-buttons button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+    }
+    .dashboard-devolucoes {
+        width: 95%;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(145deg, #fff5f8, #fff0e8);
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(255, 119, 183, 0.1);
+    }
+    
+    .dashboard-devolucoes h3 {
+        color: #FF77B7;
+        font-size: 28px;
+        margin-bottom: 25px;
+        text-align: center;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .dashboard-devolucoes table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 15px;
+        table-layout: fixed;
+    }
+    
+    .dashboard-devolucoes th {
+        background: linear-gradient(90deg, #FF77B7, #FFA24C);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 500;
+        text-align: center;
+        font-size: 14px;
+        letter-spacing: 0.5px;
+    }
+    .dashboard-devolucoes thead tr {
+        width: 100%;
+        display: table;
+        table-layout: fixed;
+    }
+    
+    .dashboard-devolucoes tbody tr {
+        width: 100%;
+        display: table;
+        table-layout: fixed;
+    }
+    
+    .dashboard-devolucoes tbody td {
+        padding: 15px 20px;
+        border: none;
+        color: #555;
+    }
+    
+    .dashboard-devolucoes thead th {
+        background: linear-gradient(90deg, #FF77B7, #FFA24C);
+        color: white;
+        padding: 18px 20px;
+        text-align: left;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 14px;
+        letter-spacing: 0.5px;
+    }
+    
+    .dashboard-devolucoes thead {
+        width: 100%;
+    }
+    
+    
+    .dashboard-devolucoes td {
+        background: white;
+        padding: 15px 20px;
+        color: #666;
+        transition: all 0.3s ease;
+    }
+    
+    .dashboard-devolucoes th:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+    .dashboard-devolucoes th:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+    .dashboard-devolucoes tr td:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+    
+    .dashboard-devolucoes tr:hover {
+        background-color: #f5f5f5;
+        transition: background-color 0.2s ease;
+    }
+    .dashboard-devolucoes tr td:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+    
+    .dashboard-devolucoes tr:hover td {
+        background: #fff5f8;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 119, 183, 0.1);
+    }
+    
+    .dashboard-devolucoes button {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        background: linear-gradient(90deg, #FF77B7, #FFA24C);
+        color: white;
+    }
+    
+    .dashboard-devolucoes button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 119, 183, 0.2);
+    }
+    
+    #modal-devolucao {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    
+    .modal-devolucao-content {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        max-width: 900px;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    
+    .modal-devolucao-content h2 {
+        color: #333;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        font-size: 1.8rem;
+    }
+    
+    .modal-devolucao-content textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 1.5rem;
+        resize: vertical;
+    }
+    
+    .modal-devolucao-content button {
+        display: block;
+        margin: 1rem auto;
+        padding: 10px 20px;
+        background-color: #eaff00;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+    }
+    
+    .modal-devolucao-content button:hover {
+        background-color: #f10085;
+    }
+    
+    .admin-panel {
+        width: 95%;
+        margin: 30px auto;
+        padding: 20px;
+        background: linear-gradient(145deg, #ffffff, #fff0e8);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 8px 20px rgba(255, 119, 183, 0.1);
+    }
     .admin-panel h3 {
-        color: #2c3e50;
-        font-size: 24px;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #3498db;
+        color:  #FF77B7;
+        font-size: 28px;
+        margin-bottom: 25px;
+        text-align: center;
+        font-weight: 600;
+        text-transform: uppercase;
+        
     }
     
     .admin-panel table {
         width: 100%;
-        border-collapse: collapse;
+        border-collapse: separate; /*células separadas tipo excel*/
+        border-spacing: 0 8px;
+        margin-top: 15px;
     }
     
     .admin-panel th {
-        background-color: #3498db;
+        background: linear-gradient(90deg, #FF77B7, #FFA24C);
         color: white;
-        padding: 15px;
-        text-align: left;
-        font-weight: bold;
+        padding: 15px 20px;
+        font-weight: 500;
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 14px;
+        letter-spacing: 0.5px;
+    }
+    .admin-panel th:first-child {
+        border-radius: 10px 0 0 10px;
     }
     
+    .admin-panel th:last-child {
+        border-radius: 0 10px 10px 0;
+    }
     .admin-panel td {
-        padding: 12px 15px;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .admin-panel tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    
-    .admin-panel tr:hover {
-        background-color: #f5f5f5;
-        transition: background-color 0.2s ease;
-    }
-    
-    .admin-panel td:last-child {
+        background: white;
+        padding: 15px 20px;
         color: #666;
-        font-style: italic;
+        transition: all 0.3s ease;
     }
     
+    .admin-panel tr td:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+    
+    .admin-panel tr td:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+    
+    .admin-panel tr:hover td {
+        background: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 119, 183, 0.1);
+    }
+    .admin-panel button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: linear-gradient(90deg, #FF77B7, #FFA24C);
+    color: white;
+    }
+    .admin-panel button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 119, 183, 0.2);
+    }
+    #tabela-categorias {
+        width: 95%;
+        margin: 30px auto;
+        background: linear-gradient(145deg, #c3f3ff, #ffe6ee);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 8px 20px rgba(144, 238, 144, 0.1);
+    }
+    .gerenciar-categorias h3{
+        color: #5d80f3;
+        font-size: 28px;
+        margin-bottom: 25px;
+        text-align: center;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    #tabela-categorias thead tr {
+        background: linear-gradient(90deg, #77b6ff, #ffb6c1);
+    }
+    #tabela-categorias th {
+        color: white;
+        padding: 18px 20px;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 14px;
+        letter-spacing: 0.5px;
+    }
+    #tabela-categorias th:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+    #tabela-categorias th:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+    #tabela-categorias td {
+        background: white;
+        padding: 15px 20px;
+        color: #666;
+        transition: all 0.3s ease;
+    }
+    #tabela-categorias tr td:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+    #tabela-categorias tr td:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+    #tabela-categorias tbody tr:hover td {
+        background: #dceeff;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(144, 238, 144, 0.1);
+    }
+    
+    #tabela-categorias button {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        background: linear-gradient(90deg, #d0e5ff, #ffb6c1);
+        color: white;
+        margin: 0 5px;
+    }
+    #tabela-produtos-admin button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(144, 238, 144, 0.2);
+    }
+    .dashboard-usuarios {
+        width: 95%;
+        margin: 30px auto;
+        background: linear-gradient(145deg, #f0fff4, #fff0f5);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 8px 20px rgba(144, 238, 144, 0.1);
+    }
+    
+    #tabela-usuarios {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+        margin-top: 15px;
+    }
+    .dashboard-usuarios h3{
+        color: #98d8a0;
+        font-size: 28px;
+        margin-bottom: 25px;
+        text-align: center;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    #tabela-usuarios thead tr{
+        background: linear-gradient(90deg, #98d8a0, #ffb6c1);
+        
+    }
+    
+    #tabela-usuarios th {
+        color: white;
+        padding: 18px 20px;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 14px;
+        letter-spacing: 0.5px;
+    }
+    #tabela-usuarios td{
+        background: white;
+        padding: 15px 20px;
+        color: #666;
+        transition: all 0.3s ease;
+    }
+    
+    #tabela-usuarios th:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+    #tabela-produtos th:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+    
+    #tabela-usuarios tr td:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+    
+    #tabela-usuarios tr td:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+    
+    #tabela-usuarios tbody tr:hover td {
+        background: #f8fff9;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(144, 238, 144, 0.1);
+    }
+    
+    #tabela-usuarios button {
+    
+        padding: 8px 15px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        background: linear-gradient(90deg, #98d8a0, #ffb6c1);
+        color: white;
+        margin: 0 5px;
+    }
+    
+    #tabela-usuarios button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(144, 238, 144, 0.2);
+    }
+    .dashboard-produtos {
+        width: 95%;
+        margin: 30px auto;
+        background: linear-gradient(145deg, #f0fff4, #fff0f5);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 8px 20px rgba(144, 238, 144, 0.1);
+    }
+    
+    .dashboard-produtos h3 {
+        color: #98d8a0;
+        font-size: 28px;
+        margin-bottom: 25px;
+        text-align: center;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    #tabela-produtos-admin {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+        margin-top: 15px;
+    }
+    
+    #tabela-produtos-admin thead tr {
+        background: linear-gradient(90deg, #98d8a0, #ffb6c1);
+    }
+    
+    #tabela-produtos-admin th {
+        color: white;
+        padding: 18px 20px;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 14px;
+        letter-spacing: 0.5px;
+    }
+    
+    #tabela-produtos-admin th:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+    
+    #tabela-produtos-admin th:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+    
+    #tabela-produtos-admin td {
+        background: white;
+        padding: 15px 20px;
+        color: #666;
+        transition: all 0.3s ease;
+    }
+    
+    #tabela-produtos-admin tr td:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+    
+    #tabela-produtos-admin tr td:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+    
+    #tabela-produtos-admin tbody tr:hover td {
+        background: #f8fff9;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(144, 238, 144, 0.1);
+    }
+    
+    #tabela-produtos-admin button {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        background: linear-gradient(90deg, #98d8a0, #ffb6c1);
+        color: white;
+        margin: 0 5px;
+    }
+    
+    #tabela-produtos-admin button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(144, 238, 144, 0.2);
+    }

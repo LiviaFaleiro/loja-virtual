@@ -180,7 +180,7 @@ public class Produto {
                 categoria.setNome(rs.getString("nome"));
                 categorias.add(categoria);
             }
-            // Agora você pode associar essas categorias ao produto, se necessário
+           
             this.setCategorias(categorias);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -193,7 +193,7 @@ public class Produto {
         String sql = "SELECT * FROM produto WHERE id = ?";
         try {
             PreparedStatement pstmt = dbConn.prepareStatement(sql);
-            pstmt.setInt(1, this.id);  // Definindo o ID do produto
+            pstmt.setInt(1, this.id);  // define o ID do produto
             ResultSet rs = pstmt.executeQuery();
             
             if (rs.next()) {

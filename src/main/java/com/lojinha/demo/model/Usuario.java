@@ -60,7 +60,7 @@ public class Usuario {
             pstmt.setString(1, this.nome);
             pstmt.setString(2, this.email);
             pstmt.setString(3, this.senha);
-            pstmt.setString(4, this.tipo); // Certifique-se de ter o atributo 'tipo' na classe Usuario
+            pstmt.setString(4, this.tipo); 
 
             pstmt.executeUpdate();
             ResultSet generatedKeys = pstmt.getGeneratedKeys();

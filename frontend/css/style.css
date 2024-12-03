@@ -596,8 +596,11 @@ button:hover {
         align-items: center;
         z-index: 1000;
     }
-    
     .modal-avaliacao-completo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         background: linear-gradient(145deg, #FF77B7, #FFA24C);
         padding: 2rem;
         border-radius: 15px;

@@ -22,6 +22,33 @@ function renderizarUsuarios() {
     });
 }
 
+function confirmarExclusaoPerfil() {
+    document.getElementById('modal-excluir-perfil').style.display = 'flex';
+}
+
+function fecharModalExclusao() {
+    document.getElementById('modal-excluir-perfil').style.display = 'none';
+}
+
+function excluirPerfil() {
+    fetch('http://localhost:8080/usuario/deletar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `id=${usuarioAtual.id}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        usuarioAtual = null;
+        localStorage.removeItem('usuario');
+        window.location.reload();
+    })
+    .catch(error => {
+        alert('Erro ao excluir conta');
+    });
+}
+
 function excluirUsuario(userId) {
     if (confirm("Tem certeza que deseja excluir este usuário?")) {
         // Delete from backend

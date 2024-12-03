@@ -6,11 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogo do if</title>
     <link rel="stylesheet" href="/frontend/css/style.css">
-    <link rel="stylesheet" href="/frontend/css/painelAdmin.css">
-    <link rel="stylesheet" href="/frontend/css/pedidosFeitos.css">
-    <link rel="stylesheet" href="/frontend/css/adminProdutosCadastrados.css">
-    <link rel="stylesheet" href="/frontend/css/gerenciamentoUsuarios.css">
-    <link rel="stylesheet" href="/frontend/css/gerenciarCategoria.css">
 </head>
 
 <body>
@@ -256,9 +251,22 @@
                 </div>
                 <button type="button" onclick="atualizarPerfil()">Salvar Alterações</button>
                 <button type="button" onclick="voltar()">Voltar</button>
+                <button type="button" class="btn-excluir-perfil" onclick="confirmarExclusaoPerfil()">Excluir Conta</button>
+        
             </form>
         </div>
     </section>
+    
+    <div id="modal-excluir-perfil" style="display: none;">
+        <div class="modal-content">
+            <h2>Excluir Conta</h2>
+            <p>Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.</p>
+            <div class="modal-buttons">
+                <button onclick="excluirPerfil()">Sim, excluir</button>
+                <button onclick="fecharModalExclusao()">Cancelar</button>
+            </div>
+        </div>
+    </div>
     
 
     <section id="modal-compras" style="display: none;">

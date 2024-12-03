@@ -143,7 +143,6 @@ function mostrarEstatisticasVendas() {
 }
 
 function enviarProduto(vendaId) {
-    alert('AAAA')
     fetch(`http://localhost:8080/vendas/enviar/${vendaId}`, { //requisição para enviar o produto
         method: 'POST', //metodo de requisição post
         headers: { //cabeçalho da requisição > json

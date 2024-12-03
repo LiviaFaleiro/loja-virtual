@@ -122,6 +122,33 @@ main {
     border-radius: 10px;
     overflow: hidden;
 }
+.carrinho-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(255, 119, 183, 0.1);
+}
+#carrinho h2 {
+    color: #FF77B7;
+    font-size: 28px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+#carrinho {
+    width: 95%;
+    margin: 30px auto;
+    background: linear-gradient(145deg, #fff5f8, #fff0e8);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 8px 20px rgba(255, 119, 183, 0.1);
+}
 
 #carrinho th, #carrinho td {
     padding: 1rem;
@@ -418,26 +445,60 @@ button:hover {
         border: 1px solid #ddd;
         border-radius: 5px;
     }
-    
     .tabela-carrinho {
         width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 15px;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+        text-align: center;
+    }
+    .tabela-carrinho tr:hover td {
+        background: #fff5f8;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 119, 183, 0.1);
     }
     
-    .tabela-carrinho th, 
-    .tabela-carrinho td {
-        padding: 10px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
     
-    .carrinho-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 0;
-    }
+.tabela-carrinho th {
+    color: white;
+    padding: 15px 20px;
+    background: linear-gradient(90deg, #FF77B7, #FFA24C);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 14px;
+    text-align: center;
+}
+    
+.tabela-carrinho td {
+    background: #fff;
+    padding: 15px 20px;
+    color: #666;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+#carrinho button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: linear-gradient(90deg, #FF77B7, #FFA24C);
+    color: white;
+    margin: 10px 5px;
+}
+
+#carrinho button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 119, 183, 0.2);
+}
+    
+.carrinho-footer {
+    margin-top: 20px;
+    text-align: right;
+    font-size: 18px;
+    font-weight: bold;
+    color: #FF77B7;
+}
     
     .btn-finalizar {
         background-color: #4CAF50;
@@ -446,6 +507,13 @@ button:hover {
         border: none;
         border-radius: 4px;
         cursor: pointer;
+    }
+    .tabela-carrinho th:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+    
+    .tabela-carrinho th:last-child {
+        border-radius: 0 10px 10px 0;
     }
 
     #modal-compras {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 02/12/2024 às 17:28
+-- Tempo de geração: 03/12/2024 às 17:47
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.0.30
 
@@ -37,14 +37,6 @@ CREATE TABLE `avaliacao` (
   `nota` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `avaliacao`
---
-
-INSERT INTO `avaliacao` (`id`, `usuario_id`, `nome_usuario`, `produto_id`, `data_avaliacao`, `texto_avaliacao`, `nota`) VALUES
-(26, 11, '123', 16, '2024-12-02 13:17:11', 'hahahahaha atendente uma querida, chegou antes do prazo 😍😍', 4),
-(37, 22, 'livia', 26, '2024-12-02 15:48:56', 'fsakjfsadfkjsadhf', 2);
-
 -- --------------------------------------------------------
 
 --
@@ -74,9 +66,7 @@ CREATE TABLE `categoria` (
 --
 
 INSERT INTO `categoria` (`id`, `nome`) VALUES
-(1, '12123'),
-(2, 'AAA'),
-(3, 'filmes');
+(10, 'professor(a)');
 
 -- --------------------------------------------------------
 
@@ -94,9 +84,7 @@ CREATE TABLE `categoria_produto` (
 --
 
 INSERT INTO `categoria_produto` (`categoria_id`, `produto_id`) VALUES
-(1, 21),
-(1, 26),
-(2, 22);
+(10, 90);
 
 -- --------------------------------------------------------
 
@@ -113,15 +101,6 @@ CREATE TABLE `devolucao` (
   `usuario_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `devolucao`
---
-
-INSERT INTO `devolucao` (`id`, `venda_id`, `justificativa`, `status`, `data_solicitacao`, `usuario_id`) VALUES
-(1, 33, 'feio demais', 'Devolução Aprovada', '2024-12-01 04:31:25', 11),
-(2, 31, 'perdi a vontade', 'Devolução Aprovada', '2024-12-01 04:41:14', 11),
-(3, 34, 'chegou quebrado', 'Devolução Recusada', '2024-12-01 05:33:20', 11);
-
 -- --------------------------------------------------------
 
 --
@@ -136,21 +115,6 @@ CREATE TABLE `item_venda` (
   `quantidade` int(11) DEFAULT NULL,
   `devolucao` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `item_venda`
---
-
-INSERT INTO `item_venda` (`id`, `produto_id`, `venda_id`, `valor`, `quantidade`, `devolucao`) VALUES
-(3, 16, 53, 0.00, 1, 0),
-(5, 16, 55, 18.00, 1, 0),
-(6, 16, 56, 18.00, 2, 0),
-(7, 16, 57, 18.00, 1, 0),
-(8, 26, 58, 15.00, 1, 0),
-(9, 16, 59, 18.00, 1, 0),
-(10, 16, 60, 18.00, 1, 0),
-(11, 26, 61, 15.00, 1, 0),
-(12, 26, 62, 15.00, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -167,21 +131,6 @@ CREATE TABLE `pedidos_cancelados` (
   `valor_total` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `pedidos_cancelados`
---
-
-INSERT INTO `pedidos_cancelados` (`id`, `venda_id`, `usuario_id`, `data_cancela`, `nome_produto`, `valor_total`) VALUES
-(1, 24, 11, '2024-11-30 19:00:47', '123', 18.00),
-(2, 23, 11, '2024-11-30 19:08:15', 'coisinha', 20.00),
-(3, 22, 11, '2024-11-30 19:16:22', 'coisinha', 72.00),
-(4, 25, 11, '2024-11-30 19:19:36', '123', 18.00),
-(5, 28, 17, '2024-11-30 22:55:44', 'coisinha', 20.00),
-(6, 32, 11, '2024-12-01 01:30:02', 'cateogria pt2', 12.00),
-(7, 55, 11, '2024-12-01 20:31:55', '123', 18.00),
-(8, 59, 17, '2024-12-02 10:13:32', '123', 18.00),
-(9, 58, 17, '2024-12-02 10:15:17', 'maldicao', 15.00);
-
 -- --------------------------------------------------------
 
 --
@@ -193,20 +142,15 @@ CREATE TABLE `produto` (
   `valor` decimal(10,2) NOT NULL,
   `nome` varchar(100) NOT NULL,
   `descricao` text DEFAULT NULL,
-  `categorias` varchar(100) DEFAULT NULL
+  `categoria_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `produto`
 --
 
-INSERT INTO `produto` (`id`, `valor`, `nome`, `descricao`, `categorias`) VALUES
-(16, 20.00, 'filme ruim', NULL, NULL),
-(19, 20.00, 'coisinha', 'nao sei', NULL),
-(21, 25.50, 'teste categoroia', 'teste da cateoria', NULL),
-(22, 12.00, 'cateogria pt2', 'aaaa por favor funciona', NULL),
-(25, 30.00, 'camiesta1', 'aaaaaaaa', NULL),
-(26, 15.00, 'maldicao', 'i dont know', NULL);
+INSERT INTO `produto` (`id`, `valor`, `nome`, `descricao`, `categoria_id`) VALUES
+(90, 50000000.00, 'carla balestro', 'muito boa', 10);
 
 -- --------------------------------------------------------
 
@@ -227,11 +171,8 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `nome`, `email`, `senha`, `tipo`) VALUES
-(11, '123', '123', '123', 'usuario'),
 (17, 'emilly', 'aaa', '123', 'admin'),
-(20, 'helena', 'faleirolivia.s@gmail.com', '1234', 'usuario'),
-(21, 'marcia', 'marcia@linda.com', '123', 'usuario'),
-(22, 'livia linda', '02150200@aluno.canoas.ifrs.edu.br', '12345', 'usuario');
+(27, 'Márcio Bigolin', 'marcio@bigoolin.com', 'marcio', 'usuario');
 
 -- --------------------------------------------------------
 
@@ -248,53 +189,6 @@ CREATE TABLE `vendas_usuario` (
   `nome_produto` varchar(255) DEFAULT NULL,
   `quantidade` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `vendas_usuario`
---
-
-INSERT INTO `vendas_usuario` (`id`, `usuario_id`, `data_venda`, `valor_total`, `status`, `nome_produto`, `quantidade`) VALUES
-(22, 11, '2024-11-27 00:00:00', 72.00, 'CANCELADO', 'coisinha', 2),
-(23, 11, '2024-11-30 00:00:00', 20.00, 'CANCELADO', 'coisinha', 1),
-(24, 11, '2024-11-30 00:00:00', 18.00, 'CANCELADO', '123', 1),
-(25, 11, '2024-11-30 00:00:00', 18.00, 'CANCELADO', '123', 1),
-(26, 11, '2024-11-30 00:00:00', 18.00, 'Avaliado', '123', 1),
-(27, 21, '2024-11-30 00:00:00', 20.00, 'Avaliado', 'coisinha', 1),
-(28, 11, '2024-11-30 00:00:00', 20.00, 'CANCELADO', 'coisinha', 1),
-(29, 11, '2024-12-01 00:00:00', 18.00, 'Avaliado', '123', 1),
-(30, 11, '2024-12-01 00:00:00', 12.00, 'Avaliado', 'cateogria pt2', 1),
-(31, 11, '2024-12-01 00:00:00', 15.00, 'Avaliado', 'maldicao', 1),
-(32, 11, '2024-12-01 00:00:00', 12.00, 'CANCELADO', 'cateogria pt2', 1),
-(33, 11, '2024-12-01 00:00:00', 75.00, 'Avaliado', 'categoria parte 3', 1),
-(34, 11, '2024-12-01 00:00:00', 20.00, 'Avaliado', 'coisinha', 1),
-(35, 11, '2024-12-01 00:00:00', 25.50, 'Avaliado', 'teste categoroia', 1),
-(36, 11, '2024-12-01 00:00:00', 18.00, 'Avaliado', '123', 1),
-(37, 11, '2024-12-01 00:00:00', 15.00, 'Avaliado', 'maldicao', 1),
-(38, 21, '2024-12-01 00:00:00', 15.00, 'Avaliado', 'maldicao', 1),
-(39, 21, '2024-12-01 00:00:00', 18.00, 'Avaliado', '123', 1),
-(40, 21, '2024-12-01 00:00:00', 18.00, 'Avaliado', '123', 1),
-(41, 21, '2024-12-01 00:00:00', 18.00, 'Avaliado', '123', 1),
-(42, 21, '2024-12-01 00:00:00', 20.00, 'Pedido feito', 'coisinha', 1),
-(43, 11, '2024-12-01 00:00:00', 15.00, 'Avaliado', 'maldicao', 1),
-(44, 11, '2024-12-01 00:00:00', 18.00, 'Avaliado', '123', 1),
-(45, 11, '2024-12-01 00:00:00', 18.00, 'Avaliado', '123', 1),
-(46, 11, '2024-12-01 00:00:00', 20.00, 'Avaliado', 'coisinha', 1),
-(47, 11, '2024-12-01 00:00:00', 18.00, 'Avaliado', '123', 1),
-(48, 11, '2024-12-01 00:00:00', 18.00, 'Avaliado', '123', 1),
-(49, 11, '2024-12-01 00:00:00', 18.00, 'Avaliado', '123', 1),
-(50, 11, '2024-12-01 00:00:00', 18.00, 'Avaliado', '123', 1),
-(51, 11, '2024-12-01 00:00:00', 18.00, 'Pedido Entregue', '123', 1),
-(52, 11, '2024-12-01 00:00:00', 18.00, 'Pedido Entregue', '123', 1),
-(53, 11, '2024-12-01 00:00:00', 18.00, 'Avaliado', '', 0),
-(54, 11, '2024-12-01 00:00:00', 18.00, 'Pedido Entregue', '123', 1),
-(55, 11, '2024-12-01 00:00:00', 18.00, 'CANCELADO', '123', 1),
-(56, 11, '2024-12-01 00:00:00', 36.00, 'Avaliado', '123', 2),
-(57, 11, '2024-12-01 00:00:00', 18.00, 'Avaliado', '123', 1),
-(58, 11, '2024-12-02 00:00:00', 15.00, 'CANCELADO', 'maldicao', 1),
-(59, 11, '2024-12-02 00:00:00', 18.00, 'CANCELADO', '123', 1),
-(60, 11, '2024-12-02 00:00:00', 18.00, 'Avaliado', '123', 1),
-(61, 11, '2024-12-02 00:00:00', 15.00, 'Avaliado', 'maldicao', 1),
-(62, 22, '2024-12-02 00:00:00', 15.00, 'Avaliado', 'maldicao', 1);
 
 -- --------------------------------------------------------
 
@@ -401,55 +295,55 @@ ALTER TABLE `venda_item`
 -- AUTO_INCREMENT de tabela `avaliacao`
 --
 ALTER TABLE `avaliacao`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT de tabela `carrinho`
 --
 ALTER TABLE `carrinho`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT de tabela `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de tabela `devolucao`
 --
 ALTER TABLE `devolucao`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `item_venda`
 --
 ALTER TABLE `item_venda`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de tabela `pedidos_cancelados`
 --
 ALTER TABLE `pedidos_cancelados`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de tabela `produto`
 --
 ALTER TABLE `produto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de tabela `vendas_usuario`
 --
 ALTER TABLE `vendas_usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT de tabela `venda_item`
